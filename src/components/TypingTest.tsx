@@ -31,6 +31,8 @@ export const TypingTest: React.FC = () => {
   const [history, setHistory] = useState<TypingStats[]>([]);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [typedWords, setTypedWords] = useState<string[]>([]);
+  const [sessionTotalWords, setSessionTotalWords] = useState(0);
+  const [sessionCorrectWords, setSessionCorrectWords] = useState(0);
   
   const inputRef = useRef<HTMLInputElement>(null);
   const t = translations[language];
@@ -87,31 +89,23 @@ export const TypingTest: React.FC = () => {
 
   // Calculate metrics
   const calculateMetrics = useCallback(() => {
-    if (!startTime || typedWords.length === 0) return;
+    if (!startTime || sessionTotalWords === 0) return;
 
     const timeElapsed = (Date.now() - startTime) / 1000 / 60; // minutes
-    const wordsTyped = typedWords.length;
+    const wordsTyped = sessionTotalWords;
     const currentWpm = Math.round(wordsTyped / Math.max(timeElapsed, 0.01));
 
-    const textWords = currentText.split(' ');
-    let correctWords = 0;
-    typedWords.forEach((word, index) => {
-      if (word === textWords[index]) {
-        correctWords++;
-      }
-    });
-    
-    const currentAccuracy = typedWords.length > 0 
-      ? Math.round((correctWords / typedWords.length) * 100) 
+    const currentAccuracy = sessionTotalWords > 0 
+      ? Math.round((sessionCorrectWords / sessionTotalWords) * 100) 
       : 100;
 
     setWpm(currentWpm);
     setAccuracy(currentAccuracy);
-  }, [typedWords, currentText, startTime]);
+  }, [sessionTotalWords, sessionCorrectWords, startTime]);
 
   useEffect(() => {
     calculateMetrics();
-  }, [calculateMetrics, typedWords]);
+  }, [calculateMetrics, sessionTotalWords]);
 
   // Handle test completion
   useEffect(() => {
@@ -141,6 +135,14 @@ export const TypingTest: React.FC = () => {
     setUserInput('');
   };
 
+  const fetchNewText = () => {
+    const newText = generateRandomText(15, language);
+    setCurrentText(newText);
+    setCurrentWordIndex(0);
+    setTypedWords([]); // Reset for the new text block
+    setUserInput('');
+  };
+
   const restartTest = (lang: Language = language) => {
     setIsActive(false);
     setTimeLeft(testDuration);
@@ -148,6 +150,8 @@ export const TypingTest: React.FC = () => {
     setAccuracy(100);
     setIsCompleted(false);
     setStartTime(null);
+    setSessionTotalWords(0);
+    setSessionCorrectWords(0);
     renewText(lang);
     inputRef.current?.focus();
   };
@@ -174,12 +178,16 @@ export const TypingTest: React.FC = () => {
       
       if (currentWordIndex < textWords.length) {
         setTypedWords(prev => [...prev, typedWord]);
+        setSessionTotalWords(prev => prev + 1);
+        if (typedWord === textWords[currentWordIndex]) {
+          setSessionCorrectWords(prev => prev + 1);
+        }
         setCurrentWordIndex(prev => prev + 1);
         setUserInput('');
         
         // Tüm kelimeler tamamlandıysa yeni metin getir
         if (currentWordIndex + 1 >= textWords.length) {
-          renewText();
+          fetchNewText();
         }
       }
     } else {
