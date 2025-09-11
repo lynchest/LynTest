@@ -19,7 +19,7 @@ export const TypingTest: React.FC = () => {
     const saved = localStorage.getItem('typingLanguage');
     return (saved as Language) || 'en';
   });
-  const [currentText, setCurrentText] = useState(() => generateRandomText(50, language));
+  const [currentText, setCurrentText] = useState(() => generateRandomText(15, language));
   const [userInput, setUserInput] = useState('');
   const [isActive, setIsActive] = useState(false);
   const [timeLeft, setTimeLeft] = useState(60);
@@ -133,35 +133,33 @@ export const TypingTest: React.FC = () => {
     inputRef.current?.focus();
   };
 
-  const restartTest = () => {
-    setIsActive(false);
+  const renewText = (lang: Language = language) => {
+    const newText = generateRandomText(15, lang);
+    setCurrentText(newText);
+    setCurrentWordIndex(0);
+    setTypedWords([]);
     setUserInput('');
+  };
+
+  const restartTest = (lang: Language = language) => {
+    setIsActive(false);
     setTimeLeft(testDuration);
     setWpm(0);
     setAccuracy(100);
     setIsCompleted(false);
     setStartTime(null);
-    setCurrentWordIndex(0);
-    setTypedWords([]);
+    renewText(lang);
     inputRef.current?.focus();
   };
 
   const changeText = () => {
-    const newText = generateRandomText(50, language);
-    setCurrentText(newText);
-    setCurrentWordIndex(0);
-    setTypedWords([]);
-    restartTest();
+    renewText();
   };
 
   const changeLanguage = () => {
     const newLanguage: Language = language === 'en' ? 'tr' : 'en';
     setLanguage(newLanguage);
-    const newText = generateRandomText(50, newLanguage);
-    setCurrentText(newText);
-    setCurrentWordIndex(0);
-    setTypedWords([]);
-    restartTest();
+    restartTest(newLanguage);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -179,10 +177,9 @@ export const TypingTest: React.FC = () => {
         setCurrentWordIndex(prev => prev + 1);
         setUserInput('');
         
-        // Tüm kelimeler tamamlandıysa testi bitir
+        // Tüm kelimeler tamamlandıysa yeni metin getir
         if (currentWordIndex + 1 >= textWords.length) {
-          setIsActive(false);
-          setIsCompleted(true);
+          renewText();
         }
       }
     } else {
@@ -194,7 +191,7 @@ export const TypingTest: React.FC = () => {
     const words = currentText.split(' ');
     
     return words.map((word, wordIndex) => {
-      let wordClassName = 'mr-2 ';
+      let wordClassName = 'mr-2 char-transition';
       
       if (wordIndex < currentWordIndex) {
         // Tamamlanan kelimeler
@@ -212,15 +209,15 @@ export const TypingTest: React.FC = () => {
         return (
           <span key={wordIndex} className={wordClassName}>
             {word.split('').map((char, charIndex) => {
-              let charClassName = '';
+              let charClassName = 'char-transition';
               if (charIndex < userInput.length) {
                 if (userInput[charIndex] === char) {
-                  charClassName = 'text-success';
+                  charClassName += ' text-success';
                 } else {
-                  charClassName = 'text-error bg-error-subtle';
+                  charClassName += ' text-error bg-error-subtle';
                 }
               } else {
-                charClassName = 'text-foreground-muted';
+                charClassName += ' text-foreground-muted';
               }
               return (
                 <span key={charIndex} className={charClassName}>

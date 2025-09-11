@@ -84,3 +84,9 @@ All colors MUST be HSL.
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  .char-transition {
+    @apply transition-all ease-in-out duration-100;
+  }
+}
