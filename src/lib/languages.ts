@@ -47,7 +47,7 @@ export const wordBanks = {
 
 export const translations = {
   en: {
-    title: "TypeSpeed",
+    title: "LynTest",
     subtitle: "Test and improve your typing speed",
     startTest: "Start Test",
     restart: "Restart",
@@ -67,7 +67,7 @@ export const translations = {
     language: "Language"
   },
   tr: {
-    title: "Hız Testi",
+    title: "LynTest",
     subtitle: "Klavye yazma hızınızı test edin ve geliştirin",
     startTest: "Testi Başlat",
     restart: "Yeniden Başlat",
