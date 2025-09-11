@@ -45,7 +45,7 @@ export const TypingTest: React.FC = () => {
     const savedHistory = localStorage.getItem('typingHistory');
     if (savedHistory) {
       try {
-        const parsedHistory = JSON.parse(savedHistory).map((item: any) => ({
+        const parsedHistory = JSON.parse(savedHistory).map((item: Omit<TypingStats, 'timestamp'> & { timestamp: string }) => ({
           ...item,
           timestamp: new Date(item.timestamp)
         }));
@@ -283,7 +283,7 @@ export const TypingTest: React.FC = () => {
             {/* Text display */}
             <Card className="bg-gradient-card border-card-border shadow-lg">
               <CardContent className="p-8">
-                <div className="text-xl leading-relaxed font-mono tracking-wide select-none">
+                <div className="text-2xl leading-relaxed font-mono tracking-wide select-none">
                   {renderText()}
                 </div>
               </CardContent>
@@ -300,7 +300,7 @@ export const TypingTest: React.FC = () => {
                   disabled={!isActive && !isCompleted}
                   placeholder={!isActive ? t.clickStartToBegin : t.typeTextAbove}
                   className={cn(
-                    "w-full p-4 text-lg bg-input border border-input-border rounded-lg",
+                    "w-full p-4 text-xl bg-input border border-input-border rounded-lg",
                     "text-foreground placeholder:text-foreground-subtle",
                     "focus:ring-2 focus:ring-accent focus:border-transparent",
                     "transition-all duration-normal",
