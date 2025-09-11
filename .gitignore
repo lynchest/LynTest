@@ -22,3 +22,18 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Build and output directories
+/build
+/coverage
+/reports
+.vite/
+
+# Cypress
+/cypress/videos/
+/cypress/screenshots/
+/cypress/reports/
+
+# Environment variables
+.env*
+!.env.example

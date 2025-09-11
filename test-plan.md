@@ -269,4 +269,3 @@ jobs:
 4. Düzenli test çalıştırma alışkanlığı oluştur
 5. Coverage raporlarını takip et ve iyileştir
 
-Bu yol haritası, LynTest projesinin güvenilir, performanslı ve kullanıcı dostu bir uygulama olmasını sağlayacak kapsamlı bir test stratejisi sunmaktadır.

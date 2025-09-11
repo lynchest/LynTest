@@ -321,7 +321,7 @@ export const TypingTest: React.FC = () => {
               )}
               
               <Button 
-                onClick={restartTest}
+                onClick={() => restartTest()}
                 variant="outline"
                 size="lg"
                 className="border-secondary hover:bg-secondary-hover"
