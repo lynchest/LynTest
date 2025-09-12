@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Play, RotateCcw, Shuffle, Languages } from 'lucide-react';
+import { RotateCcw, Shuffle, Languages } from 'lucide-react';
 import { MetricsDisplay } from './MetricsDisplay';
 import { TypingHistory } from './TypingHistory';
 import { cn } from '@/lib/utils';
@@ -19,7 +19,7 @@ export const TypingTest: React.FC = () => {
     const saved = localStorage.getItem('typingLanguage');
     return (saved as Language) || 'en';
   });
-  const [currentText, setCurrentText] = useState(() => generateRandomText(15, language));
+  const [currentText, setCurrentText] = useState(() => generateRandomText(10, language));
   const [userInput, setUserInput] = useState('');
   const [isActive, setIsActive] = useState(false);
   const [timeLeft, setTimeLeft] = useState(60);
@@ -128,7 +128,7 @@ export const TypingTest: React.FC = () => {
   };
 
   const renewText = (lang: Language = language) => {
-    const newText = generateRandomText(15, lang);
+    const newText = generateRandomText(10, lang);
     setCurrentText(newText);
     setCurrentWordIndex(0);
     setTypedWords([]);
@@ -136,7 +136,7 @@ export const TypingTest: React.FC = () => {
   };
 
   const fetchNewText = () => {
-    const newText = generateRandomText(15, language);
+    const newText = generateRandomText(10, language);
     setCurrentText(newText);
     setCurrentWordIndex(0);
     setTypedWords([]); // Reset for the new text block
@@ -167,8 +167,11 @@ export const TypingTest: React.FC = () => {
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!isActive) return;
-    
+    if (!isActive && !isCompleted) {
+      startTest();
+    }
+    if (isCompleted) return;
+
     const value = e.target.value;
     
     // Boşluk tuşuna basıldığında kelimeyi tamamla
@@ -199,50 +202,53 @@ export const TypingTest: React.FC = () => {
     const words = currentText.split(' ');
     
     return words.map((word, wordIndex) => {
-      let wordClassName = 'mr-2 char-transition';
-      
       if (wordIndex < currentWordIndex) {
         // Tamamlanan kelimeler
         const typedWord = typedWords[wordIndex];
-        if (typedWord === word) {
-          wordClassName += 'text-success bg-success-subtle px-1 rounded';
-        } else {
-          wordClassName += 'text-error bg-error-subtle px-1 rounded';
-        }
-      } else if (wordIndex === currentWordIndex) {
+        const isCorrect = typedWord === word;
+        const wordColorClass = isCorrect ? 'text-success bg-success-subtle' : 'text-error bg-error-subtle';
+        
+        return (
+          <span key={wordIndex} className="mr-2 char-transition">
+            <span className={`${wordColorClass} px-1 rounded`}>{word}</span>{' '}
+          </span>
+        );
+      }
+
+      if (wordIndex === currentWordIndex) {
         // Şu anda yazılan kelime
-        wordClassName += 'bg-accent-subtle px-1 rounded border-l-2 border-accent';
+        const wordClassName = 'bg-accent-subtle px-1 rounded border-l-2 border-accent';
         
         // Karakter karakter kontrolü için şu anki kelime
         return (
-          <span key={wordIndex} className={wordClassName}>
-            {word.split('').map((char, charIndex) => {
-              let charClassName = 'char-transition';
-              if (charIndex < userInput.length) {
-                if (userInput[charIndex] === char) {
-                  charClassName += ' text-success';
+          <React.Fragment key={wordIndex}>
+            <span className={`char-transition ${wordClassName}`}>
+              {word.split('').map((char, charIndex) => {
+                let charClassName = 'char-transition';
+                if (charIndex < userInput.length) {
+                  if (userInput[charIndex] === char) {
+                    charClassName += ' text-success';
+                  } else {
+                    charClassName += ' text-error bg-error-subtle';
+                  }
                 } else {
-                  charClassName += ' text-error bg-error-subtle';
+                  charClassName += ' text-foreground-muted';
                 }
-              } else {
-                charClassName += ' text-foreground-muted';
-              }
-              return (
-                <span key={charIndex} className={charClassName}>
-                  {char}
-                </span>
-              );
-            })}
-            <span className="text-foreground-muted"> </span>
-          </span>
+                return (
+                  <span key={charIndex} className={charClassName}>
+                    {char}
+                  </span>
+                );
+              })}
+            </span>
+            <span className="mr-2"> </span>
+          </React.Fragment>
         );
-      } else {
-        // Henüz yazılmayan kelimeler
-        wordClassName += 'text-foreground-muted';
       }
-      
+
+      // Henüz yazılmayan kelimeler
       return (
-        <span key={wordIndex} className={wordClassName}>
+        <span key={wordIndex} className="mr-2 char-transition text-foreground-muted">
           {word}{' '}
         </span>
       );
@@ -288,7 +294,7 @@ export const TypingTest: React.FC = () => {
             {/* Text display */}
             <Card className="bg-gradient-card border-card-border shadow-lg">
               <CardContent className="p-8">
-                <div className="text-2xl leading-relaxed font-mono tracking-wide select-none h-[6rem] overflow-hidden">
+                <div className="text-2xl leading-relaxed font-mono tracking-wide select-none h-[5.5rem] overflow-hidden">
                   {renderText()}
                 </div>
               </CardContent>
@@ -302,8 +308,8 @@ export const TypingTest: React.FC = () => {
                   type="text"
                   value={userInput}
                   onChange={handleInputChange}
-                  disabled={!isActive && !isCompleted}
-                  placeholder={!isActive ? t.clickStartToBegin : t.typeTextAbove}
+                  disabled={isCompleted}
+                  placeholder={t.typeTextAbove}
                   className={cn(
                     "w-full p-4 text-xl bg-input border border-input-border rounded-lg",
                     "text-foreground placeholder:text-foreground-subtle",
@@ -317,16 +323,7 @@ export const TypingTest: React.FC = () => {
 
             {/* Controls */}
             <div className="flex flex-wrap gap-4 justify-center">
-              {!isActive && !isCompleted && (
-                <Button 
-                  onClick={startTest}
-                  size="lg"
-                  className="bg-gradient-primary hover:bg-primary-hover text-primary-foreground shadow-md"
-                >
-                  <Play className="mr-2 h-4 w-4" />
-                  {t.startTest}
-                </Button>
-              )}
+              
               
               <Button 
                 onClick={() => restartTest()}
