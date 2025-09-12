@@ -1,12 +1,13 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, lazy, Suspense } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { RotateCcw, Shuffle, Languages } from 'lucide-react';
 import { MetricsDisplay } from './MetricsDisplay';
-import { TypingHistory } from './TypingHistory';
-import { StatsModal } from './StatsModal';
 import { cn } from '@/lib/utils';
 import { generateRandomText, translations, type Language } from '@/lib/languages';
+
+const TypingHistory = lazy(() => import('./TypingHistory').then(module => ({ default: module.TypingHistory })));
+const StatsModal = lazy(() => import('./StatsModal').then(module => ({ default: module.StatsModal })));
 
 interface TypingStats {
   wpm: number;
@@ -159,7 +160,7 @@ export const TypingTest: React.FC = () => {
       setDetailedStats(detailed);
       setShowStatsModal(true);
     }
-  }, [isCompleted]);
+  }, [isCompleted, wpm, accuracy, testDuration, startTime, keyDetails, errorsByChar, sessionTotalWords, sessionCorrectWords, errorsByWord]);
 
   const startTest = () => {
     lastChangeTime.current = null;
@@ -443,16 +444,20 @@ export const TypingTest: React.FC = () => {
 
           {/* History sidebar */}
           <div className="lg:col-span-1">
-            <TypingHistory history={history} language={language} />
+            <Suspense fallback={<div className="text-center p-4">Loading History...</div>}>
+              <TypingHistory history={history} language={language} />
+            </Suspense>
           </div>
         </div>
       
-        <StatsModal 
-          open={showStatsModal} 
-          stats={detailedStats} 
-          language={language} 
-          onClose={() => setShowStatsModal(false)} 
-        />
+        <Suspense fallback={null}>
+          <StatsModal 
+            open={showStatsModal} 
+            stats={detailedStats} 
+            language={language} 
+            onClose={() => setShowStatsModal(false)} 
+          />
+        </Suspense>
       </div>
     </div>
   );
