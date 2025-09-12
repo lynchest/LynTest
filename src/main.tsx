@@ -2,7 +2,8 @@ import { createRoot } from "react-dom/client";
 import { StrictMode, Component, ReactNode } from "react";
 import App from "./App.tsx";
 import indexCss from "./index.css?url";
-import { Analytics } from "@vercel/analytics/next";
+import { inject } from '@vercel/analytics';
+
 // Function to load CSS asynchronously
 function loadCssAsync(url: string, callback: () => void) {
   const link = document.createElement("link");
@@ -63,11 +64,11 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
 // Load CSS and then render the app
 loadCssAsync(indexCss, () => {
+  inject(); // Vercel Analytics'i başlat
   createRoot(document.getElementById("root")!).render(
     <StrictMode>
       <ErrorBoundary>
         <App />
-        <Analytics />
       </ErrorBoundary>
     </StrictMode>
   );
