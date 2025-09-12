@@ -2,7 +2,7 @@ import { createRoot } from "react-dom/client";
 import { StrictMode, Component, ReactNode } from "react";
 import App from "./App.tsx";
 import indexCss from "./index.css?url";
-
+import { Analytics } from "@vercel/analytics/next";
 // Function to load CSS asynchronously
 function loadCssAsync(url: string, callback: () => void) {
   const link = document.createElement("link");
@@ -67,6 +67,7 @@ loadCssAsync(indexCss, () => {
     <StrictMode>
       <ErrorBoundary>
         <App />
+        <Analytics />
       </ErrorBoundary>
     </StrictMode>
   );
