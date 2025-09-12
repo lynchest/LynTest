@@ -31,24 +31,21 @@ describe('TypingTest', () => {
   it('should render the initial state correctly', () => {
     render(<TypingTest />);
     expect(screen.getByText('LynTest')).toBeInTheDocument();
-    expect(screen.getByText('Start Test')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Click Start to begin typing...')).toBeInTheDocument();
   });
 
-  it('should start the test on button click', () => {
+  it('should start the test on first input', () => {
     render(<TypingTest />);
-    const startButton = screen.getByText('Start Test');
-    fireEvent.click(startButton);
+    const input = screen.getByPlaceholderText('Click Start to begin typing...');
+    fireEvent.change(input, { target: { value: 'a' } });
 
-    expect(screen.queryByText('Start Test')).not.toBeInTheDocument();
     expect(screen.getByPlaceholderText('Type the text above...')).toBeInTheDocument();
+    expect(screen.queryByPlaceholderText('Click Start to begin typing...')).not.toBeInTheDocument();
   });
 
   it('should handle user input', () => {
     render(<TypingTest />);
-    fireEvent.click(screen.getByText('Start Test'));
-
-    const input = screen.getByPlaceholderText('Type the text above...');
+    const input = screen.getByPlaceholderText('Click Start to begin typing...');
     fireEvent.change(input, { target: { value: 'hello ' } });
 
     // Check if the first word is marked as typed
@@ -57,7 +54,8 @@ describe('TypingTest', () => {
 
   it('should stop the test when time runs out', () => {
     render(<TypingTest />);
-    fireEvent.click(screen.getByText('Start Test'));
+    const input = screen.getByPlaceholderText('Click Start to begin typing...');
+    fireEvent.change(input, { target: { value: 'a' } }); // Start the test
 
     act(() => {
       jest.advanceTimersByTime(60000);
@@ -68,10 +66,8 @@ describe('TypingTest', () => {
 
   it('should restart the test', () => {
     render(<TypingTest />);
-    fireEvent.click(screen.getByText('Start Test'));
-
-    const input = screen.getByPlaceholderText('Type the text above...');
-    fireEvent.change(input, { target: { value: 'some text ' } });
+    const input = screen.getByPlaceholderText('Click Start to begin typing...');
+    fireEvent.change(input, { target: { value: 'some text ' } }); // Start the test
 
     const restartButton = screen.getByText('Restart');
     fireEvent.click(restartButton);

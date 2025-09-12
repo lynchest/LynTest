@@ -77,7 +77,8 @@ export const translations = {
     noTestsYet: "No tests completed yet",
     clickStartToBegin: "Click Start to begin typing...",
     typeTextAbove: "Type the text above...",
-    language: "Language"
+    language: "Language",
+    resultsDescription: "Here are your results for the test."
   },
   tr: {
     title: "LynTest",
@@ -97,7 +98,8 @@ export const translations = {
     noTestsYet: "Henüz test tamamlanmadı",
     clickStartToBegin: "Yazmaya başlamak için Başlat'a tıklayın...",
     typeTextAbove: "Yukarıdaki metni yazın...",
-    language: "Dil"
+    language: "Dil",
+    resultsDescription: "Test sonuçlarınız aşağıdadır."
   }
 };
 

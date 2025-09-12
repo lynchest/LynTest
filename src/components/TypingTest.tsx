@@ -4,6 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { RotateCcw, Shuffle, Languages } from 'lucide-react';
 import { MetricsDisplay } from './MetricsDisplay';
 import { TypingHistory } from './TypingHistory';
+import { StatsModal } from './StatsModal';
 import { cn } from '@/lib/utils';
 import { generateRandomText, translations, type Language } from '@/lib/languages';
 
@@ -12,6 +13,20 @@ interface TypingStats {
   accuracy: number;
   duration: number;
   timestamp: Date;
+}
+
+interface DetailedStats {
+  wpm: number;
+  accuracy: number;
+  duration: number;
+  totalChars: number;
+  correctChars: number;
+  totalWords: number;
+  correctWords: number;
+  errorsByChar: Record<string, number>;
+  errorsByWord: Record<string, number>;
+  keyDetails: Array<{key: string; time: number; error: boolean}>;
+  avgTimePerChar: number;
 }
 
 export const TypingTest: React.FC = () => {
@@ -33,8 +48,14 @@ export const TypingTest: React.FC = () => {
   const [typedWords, setTypedWords] = useState<string[]>([]);
   const [sessionTotalWords, setSessionTotalWords] = useState(0);
   const [sessionCorrectWords, setSessionCorrectWords] = useState(0);
+  const [errorsByChar, setErrorsByChar] = useState<Record<string, number>>({});
+  const [errorsByWord, setErrorsByWord] = useState<Record<string, number>>({});
+  const [keyDetails, setKeyDetails] = useState<Array<{key: string; time: number; error: boolean}>>([]);
+  const [detailedStats, setDetailedStats] = useState<DetailedStats | null>(null);
+  const [showStatsModal, setShowStatsModal] = useState(false);
   
   const inputRef = useRef<HTMLInputElement>(null);
+  const lastChangeTime = useRef<number | null>(null);
   const t = translations[language];
 
   // Save language preference
@@ -117,10 +138,34 @@ export const TypingTest: React.FC = () => {
         timestamp: new Date()
       };
       setHistory(prev => [finalStats, ...prev.slice(0, 9)]); // Keep last 10 results
+
+      // Generate detailed stats
+      const timeElapsed = (Date.now() - (startTime || Date.now())) / 1000 / 60; // minutes
+      const totalChars = keyDetails.length;
+      const avgTime = totalChars > 0 ? keyDetails.reduce((sum, k) => sum + k.time, 0) / totalChars : 0;
+      const detailed: DetailedStats = {
+        wpm,
+        accuracy,
+        duration: testDuration,
+        totalChars,
+        correctChars: totalChars - Object.values(errorsByChar).reduce((sum, v) => sum + v, 0),
+        totalWords: sessionTotalWords,
+        correctWords: sessionCorrectWords,
+        errorsByChar,
+        errorsByWord,
+        keyDetails,
+        avgTimePerChar: avgTime,
+      };
+      setDetailedStats(detailed);
+      setShowStatsModal(true);
     }
-  }, [isCompleted, wpm, accuracy, testDuration]);
+  }, [isCompleted]);
 
   const startTest = () => {
+    lastChangeTime.current = null;
+    setErrorsByChar({});
+    setErrorsByWord({});
+    setKeyDetails([]);
     setIsActive(true);
     setStartTime(Date.now());
     setIsCompleted(false);
@@ -152,6 +197,10 @@ export const TypingTest: React.FC = () => {
     setStartTime(null);
     setSessionTotalWords(0);
     setSessionCorrectWords(0);
+    lastChangeTime.current = null;
+    setErrorsByChar({});
+    setErrorsByWord({});
+    setKeyDetails([]);
     renewText(lang);
     inputRef.current?.focus();
   };
@@ -173,21 +222,41 @@ export const TypingTest: React.FC = () => {
     if (isCompleted) return;
 
     const value = e.target.value;
-    
+    const now = Date.now();
+
+    if (lastChangeTime.current !== null && value.length > userInput.length) {
+      const newChar = value.slice(-1);
+      const duration = now - lastChangeTime.current;
+      const currentWord = currentText.split(' ')[currentWordIndex] || '';
+      const currentPos = userInput.length;
+      const targetChar = currentWord[currentPos];
+      const isError = targetChar && newChar !== targetChar;
+
+      setKeyDetails(prev => [...prev, {key: newChar, time: duration, error: isError}]);
+
+      if (isError) {
+        setErrorsByChar(prev => ({...prev, [newChar]: (prev[newChar] || 0) + 1}));
+      }
+    }
+
+    lastChangeTime.current = now;
+
     // Boşluk tuşuna basıldığında kelimeyi tamamla
     if (value.endsWith(' ')) {
       const typedWord = value.trim();
       const textWords = currentText.split(' ');
-      
+
       if (currentWordIndex < textWords.length) {
         setTypedWords(prev => [...prev, typedWord]);
         setSessionTotalWords(prev => prev + 1);
         if (typedWord === textWords[currentWordIndex]) {
           setSessionCorrectWords(prev => prev + 1);
+        } else {
+          setErrorsByWord(prev => ({...prev, [textWords[currentWordIndex]]: (prev[textWords[currentWordIndex]] || 0) + 1}));
         }
         setCurrentWordIndex(prev => prev + 1);
         setUserInput('');
-        
+
         // Tüm kelimeler tamamlandıysa yeni metin getir
         if (currentWordIndex + 1 >= textWords.length) {
           fetchNewText();
@@ -309,7 +378,7 @@ export const TypingTest: React.FC = () => {
                   value={userInput}
                   onChange={handleInputChange}
                   disabled={isCompleted}
-                  placeholder={t.typeTextAbove}
+                  placeholder={isActive ? t.typeTextAbove : t.clickStartToBegin}
                   className={cn(
                     "w-full p-4 text-xl bg-input border border-input-border rounded-lg",
                     "text-foreground placeholder:text-foreground-subtle",
@@ -377,6 +446,13 @@ export const TypingTest: React.FC = () => {
             <TypingHistory history={history} language={language} />
           </div>
         </div>
+      
+        <StatsModal 
+          open={showStatsModal} 
+          stats={detailedStats} 
+          language={language} 
+          onClose={() => setShowStatsModal(false)} 
+        />
       </div>
     </div>
   );
