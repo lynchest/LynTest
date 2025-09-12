@@ -6,6 +6,7 @@ export default defineConfig({
     setupNodeEvents(on, config) {
       // implement node event listeners here
     },
-    baseUrl: 'http://localhost:5173', // Assuming Vite dev server runs on this port
+    specPattern: 'cypress/e2e/specs/**/*.spec.ts', // Updated to match existing spec files
+    baseUrl: 'http://localhost:3030', // Updated to match Vite dev server port
   },
 });

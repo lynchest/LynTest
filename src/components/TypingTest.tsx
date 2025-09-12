@@ -288,7 +288,7 @@ export const TypingTest: React.FC = () => {
             {/* Text display */}
             <Card className="bg-gradient-card border-card-border shadow-lg">
               <CardContent className="p-8">
-                <div className="text-2xl leading-relaxed font-mono tracking-wide select-none">
+                <div className="text-2xl leading-relaxed font-mono tracking-wide select-none h-[6rem] overflow-hidden">
                   {renderText()}
                 </div>
               </CardContent>

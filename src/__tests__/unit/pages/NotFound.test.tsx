@@ -1,41 +1,27 @@
 import { render, screen, fireEvent } from '@/__tests__/setup/test-utils';
 import NotFound from '@/pages/NotFound';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-// Mock useLocation
+// Mock react-router-dom hooks
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useLocation: jest.fn(),
+  useNavigate: jest.fn(),
 }));
 
 describe('NotFound Page', () => {
   const mockUseLocation = useLocation as jest.Mock;
-  let originalLocation: Location;
-
-  beforeAll(() => {
-    originalLocation = window.location;
-  });
+  const mockUseNavigate = useNavigate as jest.Mock;
+  let navigateMock: jest.Mock;
 
   beforeEach(() => {
-    const mockLocation = {
-      pathname: '',
-      assign: jest.fn(),
-      // Add other properties of window.location that might be accessed
-      // e.g., href, origin, protocol, host, hostname, port, search, hash
-    };
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: mockLocation,
-    });
     mockUseLocation.mockReturnValue({ pathname: '/non-existent-route' });
+    navigateMock = jest.fn();
+    mockUseNavigate.mockReturnValue(navigateMock);
     jest.spyOn(console, 'error').mockImplementation(() => {});
   });
 
   afterEach(() => {
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: originalLocation,
-    });
     jest.restoreAllMocks();
   });
 
@@ -58,6 +44,6 @@ describe('NotFound Page', () => {
     render(<NotFound />);
     const backButton = screen.getByText('Back to Home');
     fireEvent.click(backButton);
-    expect(window.location.assign).toHaveBeenCalledWith('/');
+    expect(navigateMock).toHaveBeenCalledWith('/');
   });
 });

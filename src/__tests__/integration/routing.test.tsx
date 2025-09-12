@@ -7,21 +7,23 @@ jest.mock('@/pages/Index', () => () => <div>Mock Index Page</div>);
 jest.mock('@/pages/NotFound', () => () => <div>Mock Not Found Page</div>);
 
 describe('App Routing', () => {
-  it('should render the Index page for the / route', () => {
+  it('should render the Index page for the / route', async () => {
     render(
       <MemoryRouter initialEntries={['/']}>
         <AppRoutes />
       </MemoryRouter>
     );
-    expect(screen.getByText('Mock Index Page')).toBeInTheDocument();
+    expect(screen.getByRole('progressbar')).toBeInTheDocument();
+    expect(await screen.findByText('Mock Index Page')).toBeInTheDocument();
   });
 
-  it('should render the NotFound page for an unknown route', () => {
+  it('should render the NotFound page for an unknown route', async () => {
     render(
       <MemoryRouter initialEntries={['/non-existent-route']}>
         <AppRoutes />
       </MemoryRouter>
     );
-    expect(screen.getByText('Mock Not Found Page')).toBeInTheDocument();
+    expect(screen.getByRole('progressbar')).toBeInTheDocument();
+    expect(await screen.findByText('Mock Not Found Page')).toBeInTheDocument();
   });
 });

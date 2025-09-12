@@ -18,8 +18,11 @@ Object.defineProperty(window, 'matchMedia', {
 });
 
 describe('App', () => {
-  it('should render without crashing', () => {
+  it('should render without crashing', async () => {
     render(<App />);
-    expect(screen.getByText('LynTest')).toBeInTheDocument(); // Assuming LynTest is always rendered
+    // Initially, the PageLoader should be visible
+    expect(screen.getByRole('progressbar')).toBeInTheDocument();
+    // After loading, "LynTest" should be in the document
+    expect(await screen.findByText('LynTest')).toBeInTheDocument();
   });
 });

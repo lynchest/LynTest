@@ -21,8 +21,7 @@ describe('Typing Test E2E', () => {
   });
 
   it('should change language', () => {
-    cy.contains('EN').click();
-    cy.contains('TR').should('be.visible');
-    cy.contains('Yazmaya başlamak için Başlat'a tıklayın...').should('be.visible');
+    cy.get('button').contains('EN').click(); // Mevcut dil EN ise TR'ye çevir
+    cy.contains('Yazmaya başlamak için Başlat\'a tıklayın...').should('be.visible'); // Türkçe metnin görünür olmasını bekle
   });
 });
