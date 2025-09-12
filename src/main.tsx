@@ -3,6 +3,7 @@ import { StrictMode, Component, ReactNode } from "react";
 import App from "./App.tsx";
 import indexCss from "./index.css?url";
 import { inject } from '@vercel/analytics';
+import { injectSpeedInsights } from '@vercel/speed-insights';
 
 // Function to load CSS asynchronously
 function loadCssAsync(url: string, callback: () => void) {
@@ -65,6 +66,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 // Load CSS and then render the app
 loadCssAsync(indexCss, () => {
   inject(); // Vercel Analytics'i başlat
+  injectSpeedInsights(); // Vercel Speed Insights'ı başlat
   createRoot(document.getElementById("root")!).render(
     <StrictMode>
       <ErrorBoundary>
