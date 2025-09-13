@@ -12,7 +12,7 @@ export const useTypingGame = (onTestComplete: (stats: DetailedStats) => void) =>
   });
 
   const generateNewLine = (lang: Language) => 
-    generateRandomText(50, lang).split(/\s+/).filter(word => word.length > 0);
+    generateRandomText(48, lang).split(/\s+/).filter(word => word.length > 0);
 
   const [lines, setLines] = useState<string[][]>(() => [
     generateNewLine(language),
@@ -28,6 +28,7 @@ export const useTypingGame = (onTestComplete: (stats: DetailedStats) => void) =>
   const [startTime, setStartTime] = useState<number | null>(null);
   const [typedWordsInLine, setTypedWordsInLine] = useState<string[]>([]);
   const [hasTestCompletedBeenCalled, setHasTestCompletedBeenCalled] = useState(false);
+  const [currentLineTotalChars, setCurrentLineTotalChars] = useState(0);
   
   const inputRef = useRef<HTMLInputElement>(null);
   const lastChangeTime = useRef<number | null>(null);
@@ -87,14 +88,16 @@ export const useTypingGame = (onTestComplete: (stats: DetailedStats) => void) =>
   };
 
   const renewText = (lang: Language = language) => {
-    setLines([
+    const newLines = [
       generateNewLine(lang),
       generateNewLine(lang),
       generateNewLine(lang),
-    ]);
+    ];
+    setLines(newLines);
     setCurrentWordIndex(0);
     setTypedWordsInLine([]);
     setUserInput('');
+    setCurrentLineTotalChars(newLines[0].join('').length); // İlk satırın toplam harf sayısını hesapla
   };
 
   const restartTest = (lang: Language = language) => {
@@ -132,11 +135,12 @@ export const useTypingGame = (onTestComplete: (stats: DetailedStats) => void) =>
     }
     lastChangeTime.current = now;
   
-    if (value.endsWith(' ')) {
+    if (value.endsWith(' ') && !userInput.endsWith(' ')) { // Ardışık boşlukları engelle
       const typedWord = value.trim();
+      if (!typedWord) return; // Prevent holding space bar to falsify WPM data
       const currentLine = lines[0];
       const currentWord = currentLine[currentWordIndex];
-      
+
       if (currentWordIndex < currentLine.length) {
         stats.recordWord(typedWord, currentWord);
         setTypedWordsInLine(prev => [...prev, typedWord]);
@@ -144,10 +148,12 @@ export const useTypingGame = (onTestComplete: (stats: DetailedStats) => void) =>
         const newWordIndex = currentWordIndex + 1;
         
         if (newWordIndex >= currentLine.length) {
-          // Line completed
+          // Satır tamamlandı
           setLines(prev => {
             const newLines = prev.slice(1);
-            newLines.push(generateNewLine(language));
+            const newLine = generateNewLine(language);
+            newLines.push(newLine);
+            setCurrentLineTotalChars(newLine.join('').length); // Yeni satırın toplam harf sayısını güncelle
             return newLines;
           });
           setCurrentWordIndex(0);
@@ -158,7 +164,7 @@ export const useTypingGame = (onTestComplete: (stats: DetailedStats) => void) =>
         
         setUserInput('');
       }
-    } else {
+    } else if (!value.endsWith(' ')) { // Sadece boşluk olmayan karakterler için userInput'i güncelle
       setUserInput(value);
     }
   };
@@ -175,6 +181,7 @@ export const useTypingGame = (onTestComplete: (stats: DetailedStats) => void) =>
       typedWordsInLine,
       wpm: stats.wpm,
       accuracy: stats.accuracy,
+      currentLineTotalChars,
     },
     actions: {
       startTest,

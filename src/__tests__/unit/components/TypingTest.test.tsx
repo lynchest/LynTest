@@ -31,12 +31,12 @@ describe('TypingTest', () => {
   it('should render the initial state correctly', () => {
     render(<TypingTest />);
     expect(screen.getByText('LynTest')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('Click Start to begin typing...')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Start typing to begin the test...')).toBeInTheDocument();
   });
 
   it('should start the test on first input', () => {
     render(<TypingTest />);
-    const input = screen.getByPlaceholderText('Click Start to begin typing...');
+    const input = screen.getByPlaceholderText('Start typing to begin the test...');
     fireEvent.change(input, { target: { value: 'a' } });
 
     expect(screen.getByPlaceholderText('Type the text above...')).toBeInTheDocument();
@@ -45,7 +45,7 @@ describe('TypingTest', () => {
 
   it('should handle user input', () => {
     render(<TypingTest />);
-    const input = screen.getByPlaceholderText('Click Start to begin typing...');
+    const input = screen.getByPlaceholderText('Start typing to begin the test...');
     fireEvent.change(input, { target: { value: 'hello ' } });
 
     // Check if the first word is marked as typed
@@ -54,7 +54,7 @@ describe('TypingTest', () => {
 
   it('should stop the test when time runs out', () => {
     render(<TypingTest />);
-    const input = screen.getByPlaceholderText('Click Start to begin typing...');
+    const input = screen.getByPlaceholderText('Start typing to begin the test...');
     fireEvent.change(input, { target: { value: 'a' } }); // Start the test
 
     act(() => {
@@ -66,13 +66,13 @@ describe('TypingTest', () => {
 
   it('should restart the test', () => {
     render(<TypingTest />);
-    const input = screen.getByPlaceholderText('Click Start to begin typing...');
+    const input = screen.getByPlaceholderText('Start typing to begin the test...');
     fireEvent.change(input, { target: { value: 'some text ' } }); // Start the test
 
     const restartButton = screen.getByText('Restart');
     fireEvent.click(restartButton);
 
-    expect(screen.getByPlaceholderText('Click Start to begin typing...')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Start typing to begin the test...')).toBeInTheDocument();
   });
 
   it('should change language', () => {

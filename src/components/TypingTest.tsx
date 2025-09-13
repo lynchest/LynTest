@@ -101,7 +101,7 @@ export const TypingTest: React.FC = () => {
             {/* Kontroller */}
             <TypingControls
               onRestart={() => actions.restartTest()}
-              onChangeText={actions.renewText}
+              onChangeText={() => actions.restartTest()}
               language={state.language}
             />
 
