@@ -89,12 +89,6 @@ export const StatsModal: React.FC<StatsModalProps> = ({ open, stats, language, o
     return 'bg-slate-300/80 hover:bg-slate-400 dark:bg-slate-600/80 dark:hover:bg-slate-500 border-slate-300 dark:border-slate-500';
   };
 
-  const getKeyOpacity = (key: string) => {
-    const keyData = stats.keyDetails.filter(k => k.key === key);
-    const maxUsage = Math.max(...Object.values(stats.errorsByChar).concat(keyData.length));
-    return Math.max(0.3, keyData.length / maxUsage);
-  };
-
   const formatTime = (ms: number) => `${(ms / 1000).toFixed(2)}s`;
 
   const exportStats = () => {
@@ -148,9 +142,12 @@ export const StatsModal: React.FC<StatsModalProps> = ({ open, stats, language, o
   );
 
   return (
-    <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-6xl max-h-[95vh] overflow-hidden bg-gradient-card border-card-border">
-        <DialogHeader className="border-b border-card-border pb-6">
+    <Dialog open={open} onOpenChange={() => {
+      console.log('StatsModal: onOpenChange called, triggering onClose');
+      onClose();
+    }}>
+      <DialogContent className="max-w-6xl max-h-[95vh] flex flex-col bg-gradient-card border-card-border">
+        <DialogHeader className="border-b border-card-border pb-6 flex-shrink-0">
           <DialogTitle className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className={`p-3 rounded-2xl ${getPerformanceGrade.bg} ${getPerformanceGrade.border} border-2`}>
@@ -175,13 +172,13 @@ export const StatsModal: React.FC<StatsModalProps> = ({ open, stats, language, o
         </DialogHeader>
 
         {/* Tabs */}
-        <div className="flex gap-2 p-2 bg-secondary rounded-2xl">
+        <div className="flex gap-2 p-2 bg-secondary rounded-2xl flex-shrink-0">
           <TabButton tab="overview" label="Overview" icon={BarChart3} />
           <TabButton tab="errors" label="Error Analysis" icon={XCircle} />
           <TabButton tab="heatmap" label="Keyboard Heatmap" icon={Keyboard} />
         </div>
 
-        <div className="overflow-y-auto flex-1 scrollbar-thin scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-600">
+        <div className="overflow-y-auto flex-1 p-1 scrollbar-thin scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-600">
           {activeTab === 'overview' && (
             <div className="space-y-8 p-2">
               {/* Performance Grade */}
@@ -363,9 +360,6 @@ export const StatsModal: React.FC<StatsModalProps> = ({ open, stats, language, o
                                 ${getKeyColor(key)}
                                 text-white shadow-xl
                               `}
-                              style={{ 
-                                opacity: getKeyOpacity(key)
-                              }}
                               title={`Key: ${key === ' ' ? 'Space' : key.toUpperCase()}\nUsed: ${keyData.length} times\nErrors: ${errors}`}
                             >
                               {key === ' ' ? 'SPACE' : key.toUpperCase()}
@@ -407,7 +401,7 @@ export const StatsModal: React.FC<StatsModalProps> = ({ open, stats, language, o
         </div>
 
         {/* Footer */}
-        <div className="border-t border-card-border pt-6 flex justify-between items-center">
+        <div className="border-t border-card-border pt-6 flex justify-between items-center flex-shrink-0">
           <div className="text-sm text-foreground-muted font-medium">
             Test completed on {new Date().toLocaleDateString()} at {new Date().toLocaleTimeString()}
           </div>

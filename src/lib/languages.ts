@@ -26,35 +26,23 @@ export const wordBanks = {
     "fish", "mountain", "stop", "once", "base", "hear", "horse", "cut", "sure", "watch", "color", "face", "wood"
   ],
   tr: [
-    "ev","su","yol","gün","kar","ay","taş","kuş","dal","ses",
-    "masa","kitap","çiçek","deniz","kalem","gölge","rüzgar","bulut","ışık","sabah",
-    "bahar","yaz","kış","orman","nehir","dağ","ova","çöl","göl","umut",
-    "özlem","sevgi","korku","cesaret","sabır","azim","hız","düşünce","hayal","şehir",
-    "kasaba","köy","mahalle","sokak","cadde","meydan","park","bahçe","pazar","araba",
-    "otobüs","tren","uçak","gemi","bisiklet","motosiklet","kamyon","tramvay","taksi","ekmek",
-    "peynir","zeytin","domates","salatalık","biber","patates","soğan","havuç","elma","armut",
-    "muz","çilek","kiraz","üzüm","karpuz","kavun","incir","nar","vişne","çorap",
-    "pantolon","gömlek","ceket","mont","kazak","etek","elbise","ayakkabı","şapka","telefon",
-    "televizyon","radyo","tablet","kamera","yazıcı","hoparlör","kulaklık","mikrofon","bilgisayar","kitaplık",
-    "dolap","çekmece","raf","sandalye","koltuk","sehpa","yatak","yorgan","yastık","çanta",
-    "cüzdan","anahtar","gözlük","saat","bilezik","yüzük","kolye","küpe","şemsiye","okul",
-    "üniversite","ders","ödev","sınav","öğretmen","öğrenci","kütüphane","laboratuvar","amfi","hava",
-    "yağmur","fırtına","güneş","sis","dolu","şimşek","çamur","şelale","okyanus","kıyı",
-    "sahil","plaj","liman","iskele","kayık","dalga","çekiç","testere","matkap","vida",
-    "çivi","pense","kerpeten","tornavida","cetvel","bıçak","pazartesi","salı","çarşamba","perşembe",
-    "cuma","cumartesi","öğle","akşam","gece","uyku","rüya","kabus","dinlenme","yürüyüş",
-    "koşu","spor","oyun","yarış","müzik","şarkı","nota","melodi","ritim","davul",
-    "gitar","piyano","keman","flüt","resim","tablo","fırça","boya","palet","heykel",
-    "sergi","müze","galeri","sanat","film","dizi","tiyatro","oyuncu","senaryo","yönetmen",
-    "sahne","perde","bilet","yemek","kahvaltı","tatlı","çorba","salata","içecek","kahve",
-    "çay","limonata","ayran","futbol","basketbol","voleybol","tenis","yüzme","güreş","boks",
-    "okçuluk","atletizm","kayak","roman","hikaye","şiir","deneme","makale","gazete","dergi",
-    "broşür","afiş","reklam",
-    "ben","sen","o","biz","siz","onlar","ve","ile","ama","çünkü",
-    "gibi","çok","az","her","bazı","şimdi","dün","bugün","yarın","bir",
-    "iki","üç","dört","beş","altı","yedi","sekiz","dokuz","on",
-    "doğru","yanlış","hızlı","yavaş","fark","alan","süre","bilgi","masaüstü","internet"
-]
+    "ve", "bir", "bu", "da", "için", "çok", "ama", "ben", "o", "de", "ne", "gibi", "var", "yok", "mi", "her",
+    "şey", "kadar", "sonra", "daha", "en", "sen", "zaman", "ile", "ya", "sadece", "büyük", "küçük", "yeni",
+    "eski", "iyi", "kötü", "doğru", "yanlış", "gel", "git", "yap", "bak", "al", "ver", "ol", "dur", "kal",
+    "ev", "araba", "okul", "kitap", "su", "anne", "baba", "çocuk", "el", "gün", "yol", "para", "iş", "insan",
+    "kedi", "köpek", "masa", "kapı", "pencere", "hava", "su", "ateş", "toprak", "ağaç", "çiçek", "güneş",
+    "ay", "yıldız", "gece", "gündüz", "sabah", "akşam", "bugün", "yarın", "dün", "şimdi", "burada", "orada",
+    "kim", "nasıl", "neden", "ne zaman", "hangi", "güzel", "çirkin", "uzun", "kısa", "sıcak", "soğuk",
+    "kolay", "zor", "mutlu", "üzgün", "hızlı", "yavaş", "önce", "sonra", "alt", "üst", "iç", "dış", "yan",
+    "karşı", "evet", "hayır", "belki", "tabii", "lütfen", "teşekkür", "merhaba", "hoşçakal", "günaydın",
+    "iyi akşamlar", "iyi geceler", "beyaz", "siyah", "kırmızı", "mavi", "yeşil", "sarı", "renk", "sayı",
+    "bir", "iki", "üç", "dört", "beş", "altı", "yedi", "sekiz", "dokuz", "on", "yüz", "bin", "milyon",
+    "yemek", "içmek", "uyumak", "okumak", "yazmak", "konuşmak", "dinlemek", "sevmek", "istemek", "bilmek",
+    "görmek", "demek", "kalmak", "başlamak", "bitirmek", "yardım", "soru", "cevap", "hayat", "dünya",
+    "ülke", "şehir", "köy", "deniz", "orman", "dağ", "göl", "nehir", "kalp", "akıl", "ruh", "beden",
+    "arkadaş", "dost", "aile", "sevgi", "saygı", "güven", "umut", "hayal", "gerçek", "oyun", "film",
+    "müzik", "şarkı", "dans", "spor", "sağlık", "hastalık", "doktor", "ilaç", "geçmiş", "gelecek"
+  ]
 
 };
 
@@ -75,7 +63,7 @@ export const translations = {
     avgWpm: "Avg WPM",
     recentTests: "Recent Tests",
     noTestsYet: "No tests completed yet",
-    clickStartToBegin: "Click Start to begin typing...",
+    clickStartToBegin: "Start typing to begin the test...",
     typeTextAbove: "Type the text above...",
     language: "Language",
     resultsDescription: "Here are your results for the test."
@@ -96,7 +84,7 @@ export const translations = {
     avgWpm: "Ort. DKD",
     recentTests: "Son Testler",
     noTestsYet: "Henüz test tamamlanmadı",
-    clickStartToBegin: "Yazmaya başlamak için Başlat'a tıklayın...",
+    clickStartToBegin: "Yazmaya başladığınızda test otomatik olarak başlar...",
     typeTextAbove: "Yukarıdaki metni yazın...",
     language: "Dil",
     resultsDescription: "Test sonuçlarınız aşağıdadır."
@@ -105,14 +93,21 @@ export const translations = {
 
 export type Language = keyof typeof wordBanks;
 
-export const generateRandomText = (wordCount: number = 50, language: Language = 'en'): string => {
-  const words = wordBanks[language];
-  const shuffledWords = [...words].sort(() => Math.random() - 0.5);
-  const selectedWords = [];
-  
-  for (let i = 0; i < wordCount; i++) {
-    selectedWords.push(shuffledWords[i % shuffledWords.length]);
+export const generateRandomText = (maxChars: number = 50, language: Language = 'en'): string => {
+  const bank = wordBanks[language];
+  let line = "";
+  while (true) {
+    const randomIndex = Math.floor(Math.random() * bank.length);
+    const word = bank[randomIndex];
+    if (line.length + word.length + 1 > maxChars) {
+      break;
+    }
+    line += (line.length > 0 ? " " : "") + word;
   }
-  
-  return selectedWords.join(' ');
+  // Eğer satır boş kalırsa (ilk kelime bile sığmazsa), en az bir kelime ekle
+  if (line.length === 0) {
+    const randomIndex = Math.floor(Math.random() * bank.length);
+    line = bank[randomIndex];
+  }
+  return line;
 };

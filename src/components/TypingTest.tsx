@@ -1,347 +1,62 @@
-import React, { useState, useEffect, useCallback, useRef, lazy, Suspense } from 'react';
+import React, { useState, lazy, Suspense, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { RotateCcw, Shuffle, Languages } from 'lucide-react';
+import { Languages } from 'lucide-react';
 import { MetricsDisplay } from './MetricsDisplay';
-import { cn } from '@/lib/utils';
-import { generateRandomText, translations, type Language } from '@/lib/languages';
+import { translations } from '@/lib/languages';
+import { DetailedStats, TypingStats } from '@/lib/types';
+
+// Kancaları (Hooks) içe aktar
+import { useTypingGame } from '@/hooks/useTypingGame';
+import { useTypingHistory } from '@/hooks/useTypingHistory';
+
+// Bileşenleri içe aktar
+import { TypingTextDisplay } from './typing-test/TypingTextDisplay';
+import { TypingInputArea } from './typing-test/TypingInputArea';
+import { TypingControls } from './typing-test/TypingControls';
+import { TestResults } from './typing-test/TestResults';
 
 const TypingHistory = lazy(() => import('./TypingHistory').then(module => ({ default: module.TypingHistory })));
 const StatsModal = lazy(() => import('./StatsModal').then(module => ({ default: module.StatsModal })));
 
-interface TypingStats {
-  wpm: number;
-  accuracy: number;
-  duration: number;
-  timestamp: Date;
-}
-
-interface DetailedStats {
-  wpm: number;
-  accuracy: number;
-  duration: number;
-  totalChars: number;
-  correctChars: number;
-  totalWords: number;
-  correctWords: number;
-  errorsByChar: Record<string, number>;
-  errorsByWord: Record<string, number>;
-  keyDetails: Array<{key: string; time: number; error: boolean}>;
-  avgTimePerChar: number;
-}
-
 export const TypingTest: React.FC = () => {
-  const [language, setLanguage] = useState<Language>(() => {
-    const saved = localStorage.getItem('typingLanguage');
-    return (saved as Language) || 'en';
-  });
-  const [currentText, setCurrentText] = useState(() => generateRandomText(10, language));
-  const [userInput, setUserInput] = useState('');
-  const [isActive, setIsActive] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(60);
-  const [testDuration] = useState(60);
-  const [startTime, setStartTime] = useState<number | null>(null);
-  const [wpm, setWpm] = useState(0);
-  const [accuracy, setAccuracy] = useState(100);
-  const [isCompleted, setIsCompleted] = useState(false);
-  const [history, setHistory] = useState<TypingStats[]>([]);
-  const [currentWordIndex, setCurrentWordIndex] = useState(0);
-  const [typedWords, setTypedWords] = useState<string[]>([]);
-  const [sessionTotalWords, setSessionTotalWords] = useState(0);
-  const [sessionCorrectWords, setSessionCorrectWords] = useState(0);
-  const [errorsByChar, setErrorsByChar] = useState<Record<string, number>>({});
-  const [errorsByWord, setErrorsByWord] = useState<Record<string, number>>({});
-  const [keyDetails, setKeyDetails] = useState<Array<{key: string; time: number; error: boolean}>>([]);
   const [detailedStats, setDetailedStats] = useState<DetailedStats | null>(null);
   const [showStatsModal, setShowStatsModal] = useState(false);
   
-  const inputRef = useRef<HTMLInputElement>(null);
-  const lastChangeTime = useRef<number | null>(null);
-  const t = translations[language];
+  const { history, addHistoryEntry } = useTypingHistory();
 
-  // Save language preference
-  useEffect(() => {
-    localStorage.setItem('typingLanguage', language);
-  }, [language]);
-
-  // Load history from localStorage on component mount
-  useEffect(() => {
-    const savedHistory = localStorage.getItem('typingHistory');
-    if (savedHistory) {
-      try {
-        const parsedHistory = JSON.parse(savedHistory).map((item: Omit<TypingStats, 'timestamp'> & { timestamp: string }) => ({
-          ...item,
-          timestamp: new Date(item.timestamp)
-        }));
-        setHistory(parsedHistory);
-      } catch (error) {
-        console.error('Error parsing typing history:', error);
-      }
-    }
-  }, []);
-
-  // Save history to localStorage whenever it changes
-  useEffect(() => {
-    if (history.length > 0) {
-      localStorage.setItem('typingHistory', JSON.stringify(history));
-    }
-  }, [history]);
-
-  // Timer logic
-  useEffect(() => {
-    let interval: NodeJS.Timeout | null = null;
-
-    if (isActive && timeLeft > 0) {
-      interval = setInterval(() => {
-        setTimeLeft((time) => {
-          if (time <= 1) {
-            setIsActive(false);
-            setIsCompleted(true);
-            return 0;
-          }
-          return time - 1;
-        });
-      }, 1000);
-    }
-
-    return () => {
-      if (interval) clearInterval(interval);
+  const handleTestComplete = useCallback((stats: DetailedStats) => {
+    const finalStats: TypingStats = {
+      wpm: stats.wpm,
+      accuracy: stats.accuracy,
+      duration: stats.duration,
+      timestamp: new Date(),
     };
-  }, [isActive, timeLeft]);
+    addHistoryEntry(finalStats);
+    setDetailedStats(stats);
+    setShowStatsModal(true);
+  }, [addHistoryEntry]);
 
-  // Calculate metrics
-  const calculateMetrics = useCallback(() => {
-    if (!startTime || sessionTotalWords === 0) return;
-
-    const timeElapsed = (Date.now() - startTime) / 1000 / 60; // minutes
-    const wordsTyped = sessionTotalWords;
-    const currentWpm = Math.round(wordsTyped / Math.max(timeElapsed, 0.01));
-
-    const currentAccuracy = sessionTotalWords > 0 
-      ? Math.round((sessionCorrectWords / sessionTotalWords) * 100) 
-      : 100;
-
-    setWpm(currentWpm);
-    setAccuracy(currentAccuracy);
-  }, [sessionTotalWords, sessionCorrectWords, startTime]);
-
-  useEffect(() => {
-    calculateMetrics();
-  }, [calculateMetrics, sessionTotalWords]);
-
-  // Handle test completion
-  useEffect(() => {
-    if (isCompleted) {
-      const finalStats: TypingStats = {
-        wpm,
-        accuracy,
-        duration: testDuration,
-        timestamp: new Date()
-      };
-      setHistory(prev => [finalStats, ...prev.slice(0, 9)]); // Keep last 10 results
-
-      // Generate detailed stats
-      const timeElapsed = (Date.now() - (startTime || Date.now())) / 1000 / 60; // minutes
-      const totalChars = keyDetails.length;
-      const avgTime = totalChars > 0 ? keyDetails.reduce((sum, k) => sum + k.time, 0) / totalChars : 0;
-      const detailed: DetailedStats = {
-        wpm,
-        accuracy,
-        duration: testDuration,
-        totalChars,
-        correctChars: totalChars - Object.values(errorsByChar).reduce((sum, v) => sum + v, 0),
-        totalWords: sessionTotalWords,
-        correctWords: sessionCorrectWords,
-        errorsByChar,
-        errorsByWord,
-        keyDetails,
-        avgTimePerChar: avgTime,
-      };
-      setDetailedStats(detailed);
-      setShowStatsModal(true);
-    }
-  }, [isCompleted, wpm, accuracy, testDuration, startTime, keyDetails, errorsByChar, sessionTotalWords, sessionCorrectWords, errorsByWord]);
-
-  const startTest = () => {
-    lastChangeTime.current = null;
-    setErrorsByChar({});
-    setErrorsByWord({});
-    setKeyDetails([]);
-    setIsActive(true);
-    setStartTime(Date.now());
-    setIsCompleted(false);
-    inputRef.current?.focus();
-  };
-
-  const renewText = (lang: Language = language) => {
-    const newText = generateRandomText(10, lang);
-    setCurrentText(newText);
-    setCurrentWordIndex(0);
-    setTypedWords([]);
-    setUserInput('');
-  };
-
-  const fetchNewText = () => {
-    const newText = generateRandomText(10, language);
-    setCurrentText(newText);
-    setCurrentWordIndex(0);
-    setTypedWords([]); // Reset for the new text block
-    setUserInput('');
-  };
-
-  const restartTest = (lang: Language = language) => {
-    setIsActive(false);
-    setTimeLeft(testDuration);
-    setWpm(0);
-    setAccuracy(100);
-    setIsCompleted(false);
-    setStartTime(null);
-    setSessionTotalWords(0);
-    setSessionCorrectWords(0);
-    lastChangeTime.current = null;
-    setErrorsByChar({});
-    setErrorsByWord({});
-    setKeyDetails([]);
-    renewText(lang);
-    inputRef.current?.focus();
-  };
-
-  const changeText = () => {
-    renewText();
-  };
-
-  const changeLanguage = () => {
-    const newLanguage: Language = language === 'en' ? 'tr' : 'en';
-    setLanguage(newLanguage);
-    restartTest(newLanguage);
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!isActive && !isCompleted) {
-      startTest();
-    }
-    if (isCompleted) return;
-
-    const value = e.target.value;
-    const now = Date.now();
-
-    if (lastChangeTime.current !== null && value.length > userInput.length) {
-      const newChar = value.slice(-1);
-      const duration = now - lastChangeTime.current;
-      const currentWord = currentText.split(' ')[currentWordIndex] || '';
-      const currentPos = userInput.length;
-      const targetChar = currentWord[currentPos];
-      const isError = targetChar && newChar !== targetChar;
-
-      setKeyDetails(prev => [...prev, {key: newChar, time: duration, error: isError}]);
-
-      if (isError) {
-        setErrorsByChar(prev => ({...prev, [newChar]: (prev[newChar] || 0) + 1}));
-      }
-    }
-
-    lastChangeTime.current = now;
-
-    // Boşluk tuşuna basıldığında kelimeyi tamamla
-    if (value.endsWith(' ')) {
-      const typedWord = value.trim();
-      const textWords = currentText.split(' ');
-
-      if (currentWordIndex < textWords.length) {
-        setTypedWords(prev => [...prev, typedWord]);
-        setSessionTotalWords(prev => prev + 1);
-        if (typedWord === textWords[currentWordIndex]) {
-          setSessionCorrectWords(prev => prev + 1);
-        } else {
-          setErrorsByWord(prev => ({...prev, [textWords[currentWordIndex]]: (prev[textWords[currentWordIndex]] || 0) + 1}));
-        }
-        setCurrentWordIndex(prev => prev + 1);
-        setUserInput('');
-
-        // Tüm kelimeler tamamlandıysa yeni metin getir
-        if (currentWordIndex + 1 >= textWords.length) {
-          fetchNewText();
-        }
-      }
-    } else {
-      setUserInput(value);
-    }
-  };
-
-  const renderText = () => {
-    const words = currentText.split(' ');
-    
-    return words.map((word, wordIndex) => {
-      if (wordIndex < currentWordIndex) {
-        // Tamamlanan kelimeler
-        const typedWord = typedWords[wordIndex];
-        const isCorrect = typedWord === word;
-        const wordColorClass = isCorrect ? 'text-success bg-success-subtle' : 'text-error bg-error-subtle';
-        
-        return (
-          <span key={wordIndex} className="mr-2 char-transition">
-            <span className={`${wordColorClass} px-1 rounded`}>{word}</span>{' '}
-          </span>
-        );
-      }
-
-      if (wordIndex === currentWordIndex) {
-        // Şu anda yazılan kelime
-        const wordClassName = 'bg-accent-subtle px-1 rounded border-l-2 border-accent';
-        
-        // Karakter karakter kontrolü için şu anki kelime
-        return (
-          <React.Fragment key={wordIndex}>
-            <span className={`char-transition ${wordClassName}`}>
-              {word.split('').map((char, charIndex) => {
-                let charClassName = 'char-transition';
-                if (charIndex < userInput.length) {
-                  if (userInput[charIndex] === char) {
-                    charClassName += ' text-success';
-                  } else {
-                    charClassName += ' text-error bg-error-subtle';
-                  }
-                } else {
-                  charClassName += ' text-foreground-muted';
-                }
-                return (
-                  <span key={charIndex} className={charClassName}>
-                    {char}
-                  </span>
-                );
-              })}
-            </span>
-            <span className="mr-2"> </span>
-          </React.Fragment>
-        );
-      }
-
-      // Henüz yazılmayan kelimeler
-      return (
-        <span key={wordIndex} className="mr-2 char-transition text-foreground-muted">
-          {word}{' '}
-        </span>
-      );
-    });
-  };
+  const { state, actions, refs } = useTypingGame(handleTestComplete);
+  const t = translations[state.language];
 
   return (
     <div className="min-h-screen bg-gradient-background font-sans">
       <div className="container mx-auto px-4 py-8 max-w-6xl">
-        {/* Header */}
+        {/* Başlık */}
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-4 mb-4">
             <h1 className="text-4xl font-bold font-heading text-foreground">
               {t.title}
             </h1>
             <Button
-              onClick={changeLanguage}
+              onClick={actions.changeLanguage}
               variant="outline"
               size="sm"
               className="border-secondary hover:bg-secondary-hover"
             >
               <Languages className="mr-2 h-4 w-4" />
-              {language.toUpperCase()}
+              {state.language.toUpperCase()}
             </Button>
           </div>
           <p className="text-foreground-muted text-lg">
@@ -350,102 +65,61 @@ export const TypingTest: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* Main typing area */}
+          {/* Ana yazma alanı */}
           <div className="lg:col-span-3 space-y-6">
-            {/* Metrics */}
+            {/* Metrikler */}
             <MetricsDisplay 
-              wpm={wpm} 
-              accuracy={accuracy} 
-              timeLeft={timeLeft}
-              isActive={isActive}
-              language={language}
+              wpm={state.wpm} 
+              accuracy={state.accuracy} 
+              timeLeft={state.timeLeft}
+              isActive={state.isActive}
+              language={state.language}
             />
 
-            {/* Text display */}
+            {/* Metin görüntüleme */}
             <Card className="bg-gradient-card border-card-border shadow-lg">
               <CardContent className="p-8">
-                <div className="text-2xl leading-relaxed font-mono tracking-wide select-none h-[5.5rem] overflow-hidden">
-                  {renderText()}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Input field */}
-            <Card className="bg-gradient-card border-card-border shadow-lg">
-              <CardContent className="p-6">
-                <input
-                  ref={inputRef}
-                  type="text"
-                  value={userInput}
-                  onChange={handleInputChange}
-                  disabled={isCompleted}
-                  placeholder={isActive ? t.typeTextAbove : t.clickStartToBegin}
-                  className={cn(
-                    "w-full p-4 text-xl bg-input border border-input-border rounded-lg",
-                    "text-foreground placeholder:text-foreground-subtle",
-                    "focus:ring-2 focus:ring-accent focus:border-transparent",
-                    "transition-all duration-normal",
-                    "disabled:opacity-50 disabled:cursor-not-allowed"
-                  )}
+                <TypingTextDisplay
+                  lines={state.lines}
+                  currentWordIndex={state.currentWordIndex}
+                  typedWordsInLine={state.typedWordsInLine}
+                  userInput={state.userInput}
                 />
               </CardContent>
             </Card>
 
-            {/* Controls */}
-            <div className="flex flex-wrap gap-4 justify-center">
-              
-              
-              <Button 
-                onClick={() => restartTest()}
-                variant="outline"
-                size="lg"
-                className="border-secondary hover:bg-secondary-hover"
-              >
-                <RotateCcw className="mr-2 h-4 w-4" />
-                {t.restart}
-              </Button>
-              
-              <Button 
-                onClick={changeText}
-                variant="outline"
-                size="lg"
-                className="border-secondary hover:bg-secondary-hover"
-              >
-                <Shuffle className="mr-2 h-4 w-4" />
-                {t.newText}
-              </Button>
-            </div>
+            {/* Giriş alanı */}
+            <TypingInputArea
+              inputRef={refs.inputRef}
+              userInput={state.userInput}
+              handleInputChange={actions.handleInputChange}
+              isCompleted={state.isCompleted}
+              isActive={state.isActive}
+              language={state.language}
+            />
 
-            {/* Results */}
-            {isCompleted && (
-              <Card className="bg-gradient-card border-accent shadow-glow">
-                <CardContent className="p-6 text-center">
-                  <h3 className="text-2xl font-semibold text-foreground mb-4">
-                    {t.testComplete}
-                  </h3>
-                  <div className="grid grid-cols-3 gap-4">
-                    <div>
-                      <div className="text-3xl font-bold text-accent">{wpm}</div>
-                      <div className="text-foreground-muted">{t.wpm}</div>
-                    </div>
-                    <div>
-                      <div className="text-3xl font-bold text-accent">{accuracy}%</div>
-                      <div className="text-foreground-muted">{t.accuracy}</div>
-                    </div>
-                    <div>
-                      <div className="text-3xl font-bold text-accent">{testDuration}s</div>
-                      <div className="text-foreground-muted">{t.duration}</div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+            {/* Kontroller */}
+            <TypingControls
+              onRestart={() => actions.restartTest()}
+              onChangeText={actions.renewText}
+              language={state.language}
+            />
+
+            {/* Sonuçlar */}
+            {state.isCompleted && (
+              <TestResults
+                wpm={state.wpm}
+                accuracy={state.accuracy}
+                duration={60} // Sabit süre
+                language={state.language}
+              />
             )}
           </div>
 
-          {/* History sidebar */}
+          {/* Geçmiş kenar çubuğu */}
           <div className="lg:col-span-1">
             <Suspense fallback={<div className="text-center p-4">Loading History...</div>}>
-              <TypingHistory history={history} language={language} />
+              <TypingHistory history={history} language={state.language} />
             </Suspense>
           </div>
         </div>
@@ -454,7 +128,7 @@ export const TypingTest: React.FC = () => {
           <StatsModal 
             open={showStatsModal} 
             stats={detailedStats} 
-            language={language} 
+            language={state.language} 
             onClose={() => setShowStatsModal(false)} 
           />
         </Suspense>
