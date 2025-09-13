@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { 
@@ -43,6 +43,23 @@ export const StatsModal: React.FC<StatsModalProps> = ({ open, stats, language, o
   const t = translations[language];
   const [activeTab, setActiveTab] = useState<'overview' | 'errors' | 'heatmap'>('overview');
   const [showHeatmap, setShowHeatmap] = useState(true);
+  const [exportCountdown, setExportCountdown] = useState(3);
+
+  useEffect(() => {
+    if (open) {
+      setExportCountdown(3);
+      const timer = setInterval(() => {
+        setExportCountdown((prev) => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [open]);
 
   // Calculate performance grade
   const getPerformanceGrade = useMemo(() => {
@@ -159,9 +176,15 @@ export const StatsModal: React.FC<StatsModalProps> = ({ open, stats, language, o
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <Button variant="outline" size="sm" onClick={exportStats} className="border-secondary hover:bg-secondary-hover text-foreground hover:text-foreground">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={exportStats} 
+                className="border-secondary hover:bg-secondary-hover text-foreground hover:text-foreground"
+                disabled={exportCountdown > 0}
+              >
                 <Download className="h-4 w-4 mr-2" />
-                Export
+                {exportCountdown > 0 ? `${t.export} (${exportCountdown}s)` : t.export}
               </Button>
               <Button variant="outline" size="sm" onClick={shareStats} className="border-secondary hover:bg-secondary-hover text-foreground hover:text-foreground">
                 <Share2 className="h-4 w-4 mr-2" />
@@ -412,13 +435,6 @@ export const StatsModal: React.FC<StatsModalProps> = ({ open, stats, language, o
               className="border-secondary hover:bg-secondary-hover text-foreground hover:text-foreground"
             >
               Close
-            </Button>
-            <Button
-              onClick={() => window.print()}
-              variant="outline"
-              className="border-secondary hover:bg-secondary-hover text-foreground hover:text-foreground"
-            >
-              Print Report
             </Button>
           </div>
         </div>
