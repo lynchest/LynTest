@@ -55,7 +55,7 @@ const WordComponent = memo<{
     case 'completed-correct':
       return (
         <span className={baseClasses}>
-          <span className={`${isCorrect ? 'text-foreground-muted' : 'text-error underline decoration-error decoration-2 underline-offset-2'} px-1 rounded transition-all duration-200`}>
+          <span className={`${isCorrect ? 'text-success' : 'text-error underline decoration-error decoration-2 underline-offset-2'} px-1 rounded transition-all duration-200`}>
             {word}
           </span>
         </span>
