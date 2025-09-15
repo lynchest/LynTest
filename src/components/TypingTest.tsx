@@ -1,10 +1,12 @@
 import React, { useState, lazy, Suspense, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Languages } from 'lucide-react';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Languages, Moon, Sun } from 'lucide-react';
 import { MetricsDisplay } from './MetricsDisplay';
 import { translations } from '@/lib/languages';
 import { DetailedStats, TypingStats } from '@/lib/types';
+import { useTheme } from 'next-themes';
 
 // Kancaları (Hooks) içe aktar
 import { useTypingGame } from '@/hooks/useTypingGame';
@@ -24,6 +26,7 @@ export const TypingTest: React.FC = () => {
   const [showStatsModal, setShowStatsModal] = useState(false);
   
   const { history, addHistoryEntry } = useTypingHistory();
+  const { setTheme } = useTheme();
 
   const handleTestComplete = useCallback((stats: DetailedStats) => {
     const finalStats: TypingStats = {
@@ -58,6 +61,36 @@ export const TypingTest: React.FC = () => {
               <Languages className="mr-2 h-4 w-4" />
               {state.language.toUpperCase()}
             </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm" className="border-secondary hover:bg-secondary-hover">
+                  <div className="flex items-center">
+                    <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                    <Moon className="h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 mr-2" />
+                    <span>Tema</span>
+                  </div>
+                  <span className="sr-only">Toggle theme</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="center" side="bottom" sideOffset={8} className="bg-background/80 backdrop-blur-sm">
+                <DropdownMenuItem onClick={() => setTheme("light")} className="flex items-center justify-between">
+                  <span>Light</span>
+                  <div className="flex gap-1">
+                    <span className="block w-4 h-4 rounded-full bg-white border border-gray-200"></span>
+                    <span className="block w-4 h-4 rounded-full bg-gray-200 border border-gray-300"></span>
+                    <span className="block w-4 h-4 rounded-full bg-gray-400 border border-gray-500"></span>
+                  </div>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setTheme("dark")} className="flex items-center justify-between">
+                  <span>Dark</span>
+                  <div className="flex gap-1">
+                    <span className="block w-4 h-4 rounded-full bg-gray-900 border border-gray-700"></span>
+                    <span className="block w-4 h-4 rounded-full bg-gray-700 border border-gray-600"></span>
+                    <span className="block w-4 h-4 rounded-full bg-gray-500 border border-gray-400"></span>
+                  </div>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
           <p className="text-foreground-muted text-lg">
             {t.subtitle}
