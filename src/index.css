@@ -375,8 +375,8 @@ For more information on the theming strategy, refer to the project documentation
   .matrix {
     --background: 0 0% 4%;
     --background-secondary: 0 0% 0%;
-    --background-accent: 136 100% 50%;
-    
+    --background-accent: 0 0% 8%;
+
     --foreground: 136 100% 50%;
     --foreground-muted: 136 100% 70%;
     --foreground-subtle: 136 100% 90%;
@@ -483,8 +483,8 @@ For more information on the theming strategy, refer to the project documentation
   .deep-ocean {
     --background: 204 100% 10%;
     --background-secondary: 210 100% 20%;
-    --background-accent: 180 100% 41%;
-    
+    --background-accent: 210 100% 15%;
+
     --foreground: 0 0% 100%;
     --foreground-muted: 0 0% 80%;
     --foreground-subtle: 0 0% 60%;
@@ -537,8 +537,8 @@ For more information on the theming strategy, refer to the project documentation
   .retro-80s {
     --background: 240 44% 18%;
     --background-secondary: 300 100% 50%;
-    --background-accent: 180 100% 50%;
-    
+    --background-accent: 240 30% 25%;
+
     --foreground: 0 0% 100%;
     --foreground-muted: 0 0% 80%;
     --foreground-subtle: 0 0% 60%;
@@ -645,7 +645,7 @@ For more information on the theming strategy, refer to the project documentation
   .space-exploration {
     --background: 235 60% 8%; /* Derin uzay mavisi */
     --background-secondary: 245 45% 12%; /* Yıldızlı gökyüzü mavisi */
-    --background-accent: 195 90% 55%; /* Göksel cyan mavisi */
+    --background-accent: 245 45% 10%; /* Koyu uzay mavisi */
 
     --foreground: 0 0% 95%; /* Çok parlak beyaz */
     --foreground-muted: 0 0% 75%; /* Parlak gri */
@@ -699,8 +699,8 @@ For more information on the theming strategy, refer to the project documentation
   .minimal-white {
     --background: 0 0% 96%;
     --background-secondary: 0 0% 100%;
-    --background-accent: 0 0% 18%;
-    
+    --background-accent: 230 15% 25%;
+
     --foreground: 0 0% 18%;
     --foreground-muted: 0 0% 38%;
     --foreground-subtle: 0 0% 58%;
@@ -717,7 +717,7 @@ For more information on the theming strategy, refer to the project documentation
     --secondary-foreground: 0 0% 18%;
     --secondary-hover: 0 0% 90%;
 
-    --accent: 0 0% 18%;
+    --accent: 0 0% 15%;
     --accent-foreground: 0 0% 100%;
     --accent-subtle: 0 0% 38%;
 
