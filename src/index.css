@@ -643,57 +643,57 @@ For more information on the theming strategy, refer to the project documentation
   }
 
   .space-exploration {
-    --background: 240 53% 11%;
-    --background-secondary: 240 33% 16%;
-    --background-accent: 5 100% 69%;
-    
-    --foreground: 0 0% 100%;
-    --foreground-muted: 0 0% 80%;
-    --foreground-subtle: 0 0% 60%;
+    --background: 235 60% 8%; /* Derin uzay mavisi */
+    --background-secondary: 245 45% 12%; /* Yıldızlı gökyüzü mavisi */
+    --background-accent: 195 90% 55%; /* Göksel cyan mavisi */
 
-    --card: 240 33% 16%;
-    --card-foreground: 0 0% 100%;
-    --card-border: 5 100% 69%;
+    --foreground: 0 0% 95%; /* Çok parlak beyaz */
+    --foreground-muted: 0 0% 75%; /* Parlak gri */
+    --foreground-subtle: 0 0% 55%; /* Soluk gri */
 
-    --primary: 5 100% 69%;
-    --primary-foreground: 0 0% 100%;
-    --primary-hover: 5 100% 79%;
+    --card: 245 45% 12%; /* Göksel arka plan */
+    --card-foreground: 0 0% 95%; /* Parlak beyaz */
+    --card-border: 195 90% 55%; /* Neon cyan kenarlık */
 
-    --secondary: 240 33% 16%;
-    --secondary-foreground: 0 0% 100%;
-    --secondary-hover: 240 33% 26%;
+    --primary: 195 90% 55%; /* Elektrik cyan - uzay gemisi kontrolü */
+    --primary-foreground: 235 60% 8%; /* Derin uzay üzerine beyaz yazı */
+    --primary-hover: 195 90% 65%; /* Daha parlak cyan */
 
-    --accent: 5 100% 69%;
-    --accent-foreground: 0 0% 100%;
-    --accent-subtle: 5 100% 89%;
+    --secondary: 265 80% 35%; /* Kozmik mor */
+    --secondary-foreground: 0 0% 95%; /* Parlak beyaz */
+    --secondary-hover: 265 80% 45%; /* Daha parlak mor */
 
-    --success: 142 76% 45%;
-    --success-foreground: 0 0% 100%;
-    --success-subtle: 142 30% 80%;
+    --accent: 195 90% 55%; /* Elektrik cyan */
+    --accent-foreground: 235 60% 8%; /* Derin uzaya mor yazı */
+    --accent-subtle: 195 90% 75%; /* Çok parlak cyan */
 
-    --error: 0 84% 55%;
-    --error-foreground: 0 0% 100%;
-    --error-subtle: 0 30% 80%;
+    --success: 160 90% 50%; /* Turkuaz yeşil - başarı için göksel */
+    --success-foreground: 235 60% 8%; /* Derin uzay üzerine */
+    --success-subtle: 160 90% 70%; /* Daha parlak */
 
-    --warning: 45 93% 58%;
-    --warning-foreground: 0 0% 100%;
-    --warning-subtle: 45 30% 80%;
+    --error: 0 85% 60%; /* Parlak kırmızı - uyarı için */
+    --error-foreground: 0 0% 95%; /* Parlak beyaz */
+    --error-subtle: 0 85% 80%; /* Soluk kırmızı */
 
-    --border: 5 100% 69%;
-    --input: 240 33% 16%;
-    --input-border: 5 100% 69%;
-    --ring: 5 100% 69%;
+    --warning: 45 100% 60%; /* parlak sarı - yıldız gibi */
+    --warning-foreground: 235 60% 8%; /* Derin uzay üzerine */
+    --warning-subtle: 45 100% 80%; /* Soluk sarı */
+
+    --border: 195 90% 55%; /* Neon cyan kenarlıklar */
+    --input: 245 45% 12%; /* Yıldızlı gökyüzü mavisi */
+    --input-border: 195 90% 55%; /* Neon cyan kenarlık */
+    --ring: 195 90% 55%; /* Elektrik cyan odaklanma */
 
     --radius: 0.75rem;
 
-    --gradient-primary: linear-gradient(135deg, hsl(5 100% 69%), hsl(240 33% 16%));
-    --gradient-background: linear-gradient(180deg, hsl(240 53% 11%), hsl(240 33% 16%));
-    --gradient-card: linear-gradient(135deg, hsl(240 33% 16%), hsl(5 100% 69%));
+    --gradient-primary: linear-gradient(135deg, hsl(195 90% 55%), hsl(265 80% 35%)); /* Cyan mor gradyan */
+    --gradient-background: linear-gradient(180deg, hsl(235 60% 8%), hsl(245 45% 12%), hsl(195 50% 25%)); /* Uzay derinliği */
+    --gradient-card: linear-gradient(135deg, hsl(245 45% 12%), hsl(235 40% 15%)); /* Yıldızlı gökyüzü efekti */
 
-    --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.1);
-    --shadow-md: 0 4px 6px -1px hsl(0 0% 0% / 0.1);
-    --shadow-lg: 0 10px 15px -3px hsl(0 0% 0% / 0.1);
-    --shadow-glow: 0 0 20px hsl(5 100% 69% / 0.2);
+    --shadow-sm: 0 1px 2px 0 hsl(235 60% 8% / 0.5);
+    --shadow-md: 0 4px 6px -1px hsl(235 60% 8% / 0.5);
+    --shadow-lg: 0 10px 15px -3px hsl(235 60% 8% / 0.5);
+    --shadow-glow: 0 0 30px hsl(195 90% 55% / 0.4); /* Parlak cyan parıltı */
   }
 
   .minimal-white {

@@ -156,9 +156,9 @@ export const TypingTest: React.FC = () => {
                 <DropdownMenuItem onClick={() => setTheme("space-exploration")} className="flex items-center justify-between">
                   <span>Space Exploration</span>
                   <div className="flex gap-1">
-                    <span className="block w-4 h-4 rounded-full bg-[#1B1B3A] border border-[#FF6F61]"></span>
-                    <span className="block w-4 h-4 rounded-full bg-[#FF6F61] border border-[#0D0D2B]"></span>
-                    <span className="block w-4 h-4 rounded-full bg-[#0D0D2B] border border-[#1B1B3A]"></span>
+                    <span className="block w-4 h-4 rounded-full bg-[#0c0e19] border border-[#00e5e5]"></span>
+                    <span className="block w-4 h-4 rounded-full bg-[#171b2a] border border-[#9b59ff]"></span>
+                    <span className="block w-4 h-4 rounded-full bg-[#00e5e5] border border-[#0c0e19]"></span>
                   </div>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setTheme("minimal-white")} className="flex items-center justify-between">
