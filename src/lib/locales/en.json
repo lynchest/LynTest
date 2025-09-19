@@ -70,5 +70,33 @@
     "randomWords": "Random Words",
     "literature": "Literature",
     "code": "Code"
+  },
+  "textSources": {
+    "literature": [
+      "A small cat was shivering on the street corner, trying to keep warm.",
+      "An old bookstore was filled with hidden stories on its dusty shelves.",
+      "The sunset painted the sky in shades of orange and pink.",
+      "A child was flying his kite high into the sky at the park.",
+      "The smell of coffee filled the kitchen in the early hours of the morning.",
+      "From the mountain peak, the world looked small and peaceful.",
+      "A couple was walking hand in hand along the beach.",
+      "Raindrops tapped against the window, creating a soothing melody.",
+      "On cold winter days, there's nothing like sitting by a warm fireplace.",
+      "A writer was searching for inspiration for a new novel.",
+      "Flowers blooming in the garden heralded the arrival of spring.",
+      "The old clock in the hallway chimed softly, marking the passage of time.",
+      "A gentle breeze rustled the leaves of the tall oak tree.",
+      "The city lights twinkled like stars against the night sky.",
+      "A dog barked happily as it chased after a ball in the park.",
+      "The aroma of freshly baked bread wafted through the air.",
+      "A rainbow appeared after the rain, arching across the sky in vibrant colors.",
+      "The sound of waves crashing against the shore was both powerful and calming.",
+      "A family gathered around the dinner table, sharing stories and laughter.",
+      "The first snow of the season blanketed the ground in a layer of white.",
+      "A butterfly fluttered from flower to flower in the sunny meadow.",
+      "The library was a sanctuary of knowledge, filled with books from floor to ceiling.",
+      "A musician strummed his guitar, filling the air with melodic tunes.",
+      "The scent of pine trees filled the forest, creating a refreshing atmosphere."
+    ]
   }
 }

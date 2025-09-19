@@ -25,7 +25,7 @@ export const useTypingGame = (onTestComplete: (stats: DetailedStats) => void) =>
   });
 
   const [lines, setLines] = useState<string[][]>([[], [], []]);
-  const allTextLines = useRef<string[][]>([]); // Tüm metin satırlarını tutacak
+  const [allTextLines, setAllTextLines] = useState<string[][]>([]); // Tüm metin satırlarını tutacak
   const [currentLineIndexInAllText, setCurrentLineIndexInAllText] = useState(0); // allTextLines içinde hangi satırda olduğumuzu takip edecek
   
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
@@ -46,16 +46,19 @@ export const useTypingGame = (onTestComplete: (stats: DetailedStats) => void) =>
   const loadAndProcessText = useCallback(async (src: TextSource, lang: Language) => {
     let rawText: string;
     if (src === 'randomWords') {
-      rawText = generateRandomText(48, lang);
-    } else if (textSources[src]) {
-      rawText = await textSources[src]();
+      // randomWords için başlangıçta daha fazla satır üret
+      const numInitialLines = 10; // Başlangıçta 10 satır üret
+      const generatedLines = Array.from({ length: numInitialLines }, () => generateRandomText(48, lang));
+      rawText = generatedLines.join('\n');
+    } else if (textSources(lang)[src]) {
+      rawText = await textSources(lang)[src]();
     } else {
       rawText = generateRandomText(48, lang); // Fallback
     }
     // Metni satırlara böl ve her satırı kelimelere ayır
-    allTextLines.current = rawText.split('\n').map(line => line.trim())
+    setAllTextLines(rawText.split('\n').map(line => line.trim())
                                   .filter(line => line.length > 0)
-                                  .map(line => line.split(/\s+/).filter(word => word.length > 0));
+                                  .map(line => line.split(/\s+/).filter(word => word.length > 0)));
     setCurrentLineIndexInAllText(0);
   }, []);
 
@@ -119,8 +122,8 @@ export const useTypingGame = (onTestComplete: (stats: DetailedStats) => void) =>
     const newLines: string[][] = [];
     const startIndex = currentLineIndexInAllText;
     for (let i = 0; i < 3; i++) {
-      if (startIndex + i < allTextLines.current.length) {
-        newLines.push(allTextLines.current[startIndex + i]);
+      if (startIndex + i < allTextLines.length) {
+        newLines.push(allTextLines[startIndex + i]);
       } else {
         // Metin bittiğinde veya yeterli satır olmadığında boş bir dizi ekle
         newLines.push([]);
@@ -130,7 +133,7 @@ export const useTypingGame = (onTestComplete: (stats: DetailedStats) => void) =>
     if (newLines[0]) {
       setCurrentLineTotalChars(newLines[0].join('').length);
     }
-  }, [currentLineIndexInAllText]);
+  }, [currentLineIndexInAllText, allTextLines]);
 
   const restartTest = useCallback(async () => {
     setIsActive(false);
@@ -153,7 +156,7 @@ export const useTypingGame = (onTestComplete: (stats: DetailedStats) => void) =>
 
   useEffect(() => {
     loadNextLines(); // allTextLines veya currentLineIndexInAllText değiştiğinde satırları yükle
-  }, [allTextLines.current, currentLineIndexInAllText, loadNextLines]);
+  }, [allTextLines, currentLineIndexInAllText, loadNextLines]);
 
   const changeLanguage = () => {
     const newLanguage: Language = language === 'en' ? 'tr' : 'en';
@@ -204,13 +207,23 @@ export const useTypingGame = (onTestComplete: (stats: DetailedStats) => void) =>
           // Mevcut satır bitti, bir sonraki satıra geç
           setCurrentLineIndexInAllText(prevIndex => {
             const nextIndex = prevIndex + 1;
-            if (nextIndex < allTextLines.current.length) {
+            if (nextIndex < allTextLines.length) {
               return nextIndex;
             } else {
-              // Tüm metin bitti
-              setIsActive(false);
-              setIsCompleted(true);
-              return prevIndex; // Son satırda kal
+              // Tüm metin bittiğinde, yeni satırlar ekle
+              if (source === 'randomWords') {
+                const newGeneratedLines = Array.from({ length: 5 }, () => generateRandomText(48, language)); // 5 yeni satır üret
+                const newProcessedLines = newGeneratedLines.map(line => line.trim())
+                                                          .filter(line => line.length > 0)
+                                                          .map(line => line.split(/\s+/).filter(word => word.length > 0));
+                setAllTextLines(prevAllTextLines => [...prevAllTextLines, ...newProcessedLines]);
+                return nextIndex; // Yeni eklenen satırların başlangıcına geç
+              } else {
+                // randomWords dışındaki kaynaklar için test biter
+                setIsActive(false);
+                setIsCompleted(true);
+                return prevIndex; // Son satırda kal
+              }
             }
           });
           setCurrentWordIndex(0);

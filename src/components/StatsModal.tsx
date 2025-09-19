@@ -157,7 +157,7 @@ export const StatsModal: React.FC<StatsModalProps> = ({ open, stats, language, o
       console.log('StatsModal: onOpenChange called, triggering onClose');
       onClose();
     }}>
-      <DialogContent className="max-w-6xl max-h-[95vh] flex flex-col bg-gradient-card border-card-border">
+      <DialogContent className="max-w-6xl max-h-[95vh] flex flex-col bg-gradient-card border-card-border [&>button]:hidden">
         <DialogHeader className="border-b border-card-border pb-6 flex-shrink-0">
           <DialogTitle className="flex items-center justify-between">
             <div className="flex items-center gap-4">

@@ -65,11 +65,32 @@
   },
   "textSources": {
     "literature": [
-      "Akşamüstü rüzgârı, deniz kıyısındaki dar sokaklardan geçerken tuz kokusunu beraberinde getiriyordu. Eski taş evlerin pencerelerinden sarkan çiçekler, hafifçe sallanarak gölgelerini duvarlara düşürüyordu. Limanda, balıkçı tekneleri günün son seferinden dönmüş, ağlar iskeleye serilmişti. Martılar, havada daireler çizerek kalan balık parçalarını kapma telaşındaydı. Uzakta, güneşin son ışıkları suyun üzerinde altın bir yol gibi uzanıyor, dalgalar bu yolu parçalara ayırıyordu. İnsanlar, sahil boyunca yürürken kimi sohbet ediyor, kimi sessizce manzarayı izliyordu. Zaman, bu küçük kasabada sanki daha yavaş akıyor, her an hafızaya kazınıyordu.",
-      "Orman, sabahın erken saatlerinde ince bir sis perdesiyle örtülmüştü. Ağaçların gövdeleri, buğulu bir tablo gibi birbirine karışıyor; kuş sesleri, sessizliği nazikçe bölüyordu. Toprak, gece boyunca sakladığı nemi yavaşça bırakıyor, yaprakların üzerinde minik su damlaları parlıyordu. Uzaklardan gelen dere sesi, ormanın derinliklerinde yankılanıyor; rüzgâr, çam kokusunu her yöne taşıyordu. Güneş ışıkları, dalların arasından süzülerek yerde ışık lekeleri oluşturuyor, bu lekeler rüzgârla birlikte dans ediyordu. Burada zaman, şehirdeki gibi acele etmiyor; her şey, kendi ritminde ilerliyordu.",
-      "Yağmur, şehrin üzerine ince bir perde gibi inmişti. Kaldırımlar, sokak lambalarının ışığında parlıyor; su birikintileri, geçen araçların tekerlekleriyle daireler çiziyordu. İnsanlar, şemsiyelerinin altına sığınmış, adımlarını hızlandırmıştı. Bir pastanenin vitrininde taze ekmeklerin buğusu camı hafifçe buğulandırıyor, içeriden yayılan sıcak koku dışarıya ulaşıyordu. Tramvay rayları, yağmur damlalarıyla gümüş gibi parlıyor; uzaklardan gelen zil sesi, ıslak sokaklarda yankılanıyordu. Şehir, yağmurun ritmine teslim olmuş, kendi melodisini çalıyordu.",
-      "Kütüphanenin en arka köşesinde, tozlu raflar arasında sessizlik hüküm sürüyordu. Eski kitapların ciltleri, yılların yorgunluğunu taşıyor; sayfalar, çevrildikçe hafif bir hışırtı çıkarıyordu. Pencereden süzülen solgun ışık, masanın üzerine düşüyor; mürekkep lekeli defterler, yarım kalmış cümlelerle bekliyordu. Dışarıda hayat hızla akarken burada zaman durmuş gibiydi. Her kitap, kendi dünyasına davet ediyor; kelimeler, sessizliğin içinde yankılanıyordu. Bu köşe, hem geçmişin hem de geleceğin saklandığı bir yerdi.",
-      "Dağ köyü, kışın ortasında bembeyaz bir örtüyle kaplanmıştı. Çatılardan sarkan buz sarkıtları, güneş ışığında kristaller gibi parlıyordu. Sobadan çıkan duman, gökyüzüne ince bir çizgi halinde yükseliyor; odun kokusu havaya karışıyordu. Kar, her adımda gıcırdıyor; uzaklarda bir köpek havlaması sessizliği bölüyordu. Çocuklar, yokuş aşağı kızaklarıyla kayarken kahkahaları vadide yankılanıyordu. Burada hayat, soğuğa rağmen sıcaktı; insanlar, birbirine selam vermeden geçmiyor, her kapı misafire açıktı."
+      "Küçük bir kedi, sokak köşesinde titreyerek ısınmaya çalışıyordu.",
+      "Eski bir kitapçı, tozlu raflarında saklı hikayelerle doluydu.",
+      "Güneşin batışı, gökyüzünü turuncu ve pembe tonlarına boyuyordu.",
+      "Bir çocuk, parkta uçurtmasını gökyüzüne doğru yükseltiyordu.",
+      "Kahve kokusu, sabahın erken saatlerinde mutfağı dolduruyordu.",
+      "Dağların zirvesinden bakıldığında, dünya küçük ve huzurlu görünüyordu.",
+      "Bir çift, el ele tutuşarak sahil boyunca yürüyordu.",
+      "Yağmur damlaları, pencereye vurarak sakin bir melodi oluşturuyordu.",
+      "Kışın soğuk günlerinde, sıcak bir şömine başında oturmak gibisi yoktu.",
+      "Bir yazar, yeni bir roman için ilham arıyordu.",
+      "Bahçede açan çiçekler, baharın gelişini müjdeliyordu.",
+      "Gecenin sessizliğinde, yıldızlar gökyüzünde parıldıyordu.",
+      "Bir müzisyen, sokak köşesinde gitar çalarak para kazanıyordu.",
+      "Küçük bir köyde, herkes birbirini tanır ve yardım ederdi.",
+      "Deniz kenarında yürüyüş yapmak, zihni rahatlatmanın en iyi yollarından biriydi.",
+      "Bir ressam, tuvaline hayat vermek için renklerle oynuyordu.",
+      "Sonbaharın sarı ve kırmızı yaprakları, doğanın değişimini simgeliyordu.",
+      "Bir bilim insanı, yeni bir keşif yapmak için laboratuvarında çalışıyordu.",
+      "Göl kenarında oturup, suyun sakin yüzeyine bakmak huzur vericiydi.",
+      "Bir öğretmen, öğrencilerine yeni bilgiler sunmanın heyecanını yaşıyordu.",
+      "Küçük bir köpek, sahibinin peşinden koşarak oyun oynuyordu.",
+      "Bir çiftçi, tarlasını ekip biçerek ürünlerini yetiştiriyordu.",
+      "Güneşin doğuşu, yeni bir günün başlangıcını müjdeliyordu.",
+      "Bir dansçı, sahnede zarif hareketlerle izleyicileri büyülüyordu.",
+      "Kışın beyaz karla kaplanan dağlar, muhteşem bir manzara sunuyordu.",
+      "Bir şair, duygularını kelimelerle ifade etmeye çalışıyordu."
     ]
   }
 }
