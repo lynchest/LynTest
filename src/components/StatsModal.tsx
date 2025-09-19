@@ -16,7 +16,7 @@ import {
   Eye,
   EyeOff
 } from 'lucide-react';
-import { translations, type Language } from '@/lib/languages';
+import { translations, keyboardLayouts, type Language } from '@/lib/languages';
 
 interface DetailedStats {
   wpm: number;
@@ -86,13 +86,7 @@ export const StatsModal: React.FC<StatsModalProps> = ({ open, stats, language, o
     .slice(0, 5);
 
   // Keyboard layout for heatmap
-  const keyboardRows = [
-    ['`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '='],
-    ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\\'],
-    ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', "'"],
-    ['z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/'],
-    [' ']
-  ];
+  const keyboardRows = keyboardLayouts[language] || keyboardLayouts.en;
 
   const getKeyColor = (key: string) => {
     const errors = stats.errorsByChar[key] || 0;

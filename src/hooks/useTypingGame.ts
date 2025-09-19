@@ -1,30 +1,38 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback, ChangeEvent } from 'react';
 import { generateRandomText, type Language } from '@/lib/languages';
 import { useTypingStats } from './useTypingStats';
 import { DetailedStats } from '@/lib/types';
-
-const TEST_DURATION = 60;
+import { textSources, type TextSource } from '@/lib/textSources';
 
 export const useTypingGame = (onTestComplete: (stats: DetailedStats) => void) => {
   const [language, setLanguage] = useState<Language>(() => {
     const saved = localStorage.getItem('typingLanguage');
+    const browserLanguage = navigator.language.split('-')[0]; // 'tr-TR' -> 'tr'
+    if (browserLanguage === 'tr') {
+      return 'tr';
+    }
     return (saved as Language) || 'en';
   });
 
-  const generateNewLine = (lang: Language) => 
-    generateRandomText(48, lang).split(/\s+/).filter(word => word.length > 0);
+  const [source, setSource] = useState<TextSource>(() => {
+    const saved = localStorage.getItem('textSource');
+    return (saved as TextSource) || 'randomWords';
+  });
 
-  const [lines, setLines] = useState<string[][]>(() => [
-    generateNewLine(language),
-    generateNewLine(language),
-    generateNewLine(language),
-  ]);
+  const [duration, setDuration] = useState<number>(() => {
+    const saved = localStorage.getItem('typingDuration');
+    return saved ? parseInt(saved, 10) : 60;
+  });
+
+  const [lines, setLines] = useState<string[][]>([[], [], []]);
+  const allTextLines = useRef<string[][]>([]); // Tüm metin satırlarını tutacak
+  const [currentLineIndexInAllText, setCurrentLineIndexInAllText] = useState(0); // allTextLines içinde hangi satırda olduğumuzu takip edecek
   
-  const [currentWordIndex, setCurrentWordIndex] = useState(0); // Index within the current line (lines[0])
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [userInput, setUserInput] = useState('');
   const [isActive, setIsActive] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(TEST_DURATION);
+  const [timeLeft, setTimeLeft] = useState(duration);
   const [startTime, setStartTime] = useState<number | null>(null);
   const [typedWordsInLine, setTypedWordsInLine] = useState<string[]>([]);
   const [hasTestCompletedBeenCalled, setHasTestCompletedBeenCalled] = useState(false);
@@ -33,14 +41,36 @@ export const useTypingGame = (onTestComplete: (stats: DetailedStats) => void) =>
   const inputRef = useRef<HTMLInputElement>(null);
   const lastChangeTime = useRef<number | null>(null);
 
-  const stats = useTypingStats(TEST_DURATION);
+  const stats = useTypingStats(duration);
 
-  // Dil tercihini kaydet
+  const loadAndProcessText = useCallback(async (src: TextSource, lang: Language) => {
+    let rawText: string;
+    if (src === 'randomWords') {
+      rawText = generateRandomText(48, lang);
+    } else if (textSources[src]) {
+      rawText = await textSources[src]();
+    } else {
+      rawText = generateRandomText(48, lang); // Fallback
+    }
+    // Metni satırlara böl ve her satırı kelimelere ayır
+    allTextLines.current = rawText.split('\n').map(line => line.trim())
+                                  .filter(line => line.length > 0)
+                                  .map(line => line.split(/\s+/).filter(word => word.length > 0));
+    setCurrentLineIndexInAllText(0);
+  }, []);
+
   useEffect(() => {
     localStorage.setItem('typingLanguage', language);
   }, [language]);
 
-  // Zamanlayıcı mantığı
+  useEffect(() => {
+    localStorage.setItem('textSource', source);
+  }, [source]);
+
+  useEffect(() => {
+    localStorage.setItem('typingDuration', String(duration));
+  }, [duration]);
+
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
     if (isActive && timeLeft > 0) {
@@ -60,21 +90,19 @@ export const useTypingGame = (onTestComplete: (stats: DetailedStats) => void) =>
     };
   }, [isActive, timeLeft]);
 
-  // Metrikleri hesapla
   useEffect(() => {
     if (isActive) {
       stats.calculateMetrics(startTime);
     }
   }, [isActive, startTime, stats]);
 
-  // Test tamamlandığında
   useEffect(() => {
     if (isCompleted && !hasTestCompletedBeenCalled) {
       const { wpm, accuracy } = stats.calculateMetrics(startTime);
-      if (wpm > 0) { // Sadece geçerli bir sonuç varsa kaydet
+      if (wpm > 0) {
         const detailed = stats.generateDetailedStats(startTime, wpm, accuracy);
         onTestComplete(detailed);
-        setHasTestCompletedBeenCalled(true); // Sadece bir kez çağrıldığından emin ol
+        setHasTestCompletedBeenCalled(true);
       }
     }
   }, [isCompleted, onTestComplete, startTime, stats, hasTestCompletedBeenCalled]);
@@ -87,37 +115,60 @@ export const useTypingGame = (onTestComplete: (stats: DetailedStats) => void) =>
     inputRef.current?.focus();
   };
 
-  const renewText = (lang: Language = language) => {
-    const newLines = [
-      generateNewLine(lang),
-      generateNewLine(lang),
-      generateNewLine(lang),
-    ];
+  const loadNextLines = useCallback(() => {
+    const newLines: string[][] = [];
+    const startIndex = currentLineIndexInAllText;
+    for (let i = 0; i < 3; i++) {
+      if (startIndex + i < allTextLines.current.length) {
+        newLines.push(allTextLines.current[startIndex + i]);
+      } else {
+        // Metin bittiğinde veya yeterli satır olmadığında boş bir dizi ekle
+        newLines.push([]);
+      }
+    }
     setLines(newLines);
+    if (newLines[0]) {
+      setCurrentLineTotalChars(newLines[0].join('').length);
+    }
+  }, [currentLineIndexInAllText]);
+
+  const restartTest = useCallback(async () => {
+    setIsActive(false);
+    setIsCompleted(false);
+    setTimeLeft(duration);
+    setStartTime(null);
+    setHasTestCompletedBeenCalled(false);
+    stats.resetStats();
+    await loadAndProcessText(source, language); // Tüm metni yükle ve işle
+    setCurrentLineIndexInAllText(0); // İlk satıra dön
     setCurrentWordIndex(0);
     setTypedWordsInLine([]);
     setUserInput('');
-    setCurrentLineTotalChars(newLines[0].join('').length); // İlk satırın toplam harf sayısını hesapla
-  };
-
-  const restartTest = (lang: Language = language) => {
-    setIsActive(false);
-    setIsCompleted(false);
-    setTimeLeft(TEST_DURATION);
-    setStartTime(null);
-    setHasTestCompletedBeenCalled(false); // Yeni test için sıfırla
-    stats.resetStats();
-    renewText(lang);
     inputRef.current?.focus();
-  };
+  }, [loadAndProcessText, stats, duration, source, language]);
+
+  useEffect(() => {
+    restartTest();
+  }, [language, source, duration]);
+
+  useEffect(() => {
+    loadNextLines(); // allTextLines veya currentLineIndexInAllText değiştiğinde satırları yükle
+  }, [allTextLines.current, currentLineIndexInAllText, loadNextLines]);
 
   const changeLanguage = () => {
     const newLanguage: Language = language === 'en' ? 'tr' : 'en';
     setLanguage(newLanguage);
-    restartTest(newLanguage);
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const changeSource = (newSource: TextSource) => {
+    setSource(newSource);
+  };
+
+  const changeDuration = (newDuration: number) => {
+    setDuration(newDuration);
+  };
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (!isActive) {
       startTest();
     }
@@ -128,16 +179,18 @@ export const useTypingGame = (onTestComplete: (stats: DetailedStats) => void) =>
   
     if (lastChangeTime.current !== null && value.length > userInput.length) {
       const newChar = value.slice(-1);
-      const duration = now - lastChangeTime.current;
-      const currentWord = lines[0]?.[currentWordIndex] || '';
-      const isError = newChar !== currentWord[userInput.length];
-      stats.recordKey(newChar, duration, isError);
+      if (newChar !== ' ') {
+        const duration = now - lastChangeTime.current;
+        const currentWord = lines[0]?.[currentWordIndex] || '';
+        const isError = newChar !== currentWord[userInput.length];
+        stats.recordKey(newChar, duration, isError);
+      }
     }
     lastChangeTime.current = now;
   
-    if (value.endsWith(' ') && !userInput.endsWith(' ')) { // Ardışık boşlukları engelle
+    if (value.endsWith(' ') && !userInput.endsWith(' ')) {
       const typedWord = value.trim();
-      if (!typedWord) return; // Prevent holding space bar to falsify WPM data
+      if (!typedWord) return;
       const currentLine = lines[0];
       const currentWord = currentLine[currentWordIndex];
 
@@ -148,13 +201,17 @@ export const useTypingGame = (onTestComplete: (stats: DetailedStats) => void) =>
         const newWordIndex = currentWordIndex + 1;
         
         if (newWordIndex >= currentLine.length) {
-          // Satır tamamlandı
-          setLines(prev => {
-            const newLines = prev.slice(1);
-            const newLine = generateNewLine(language);
-            newLines.push(newLine);
-            setCurrentLineTotalChars(newLine.join('').length); // Yeni satırın toplam harf sayısını güncelle
-            return newLines;
+          // Mevcut satır bitti, bir sonraki satıra geç
+          setCurrentLineIndexInAllText(prevIndex => {
+            const nextIndex = prevIndex + 1;
+            if (nextIndex < allTextLines.current.length) {
+              return nextIndex;
+            } else {
+              // Tüm metin bitti
+              setIsActive(false);
+              setIsCompleted(true);
+              return prevIndex; // Son satırda kal
+            }
           });
           setCurrentWordIndex(0);
           setTypedWordsInLine([]);
@@ -164,7 +221,7 @@ export const useTypingGame = (onTestComplete: (stats: DetailedStats) => void) =>
         
         setUserInput('');
       }
-    } else if (!value.endsWith(' ')) { // Sadece boşluk olmayan karakterler için userInput'i güncelle
+    } else if (!value.endsWith(' ')) {
       setUserInput(value);
     }
   };
@@ -172,6 +229,8 @@ export const useTypingGame = (onTestComplete: (stats: DetailedStats) => void) =>
   return {
     state: {
       language,
+      source,
+      duration,
       lines,
       currentWordIndex,
       userInput,
@@ -187,8 +246,10 @@ export const useTypingGame = (onTestComplete: (stats: DetailedStats) => void) =>
       startTest,
       restartTest,
       changeLanguage,
-      renewText,
+      renewText: restartTest, // renewText yerine restartTest kullanıldı
       handleInputChange,
+      changeSource,
+      changeDuration,
     },
     refs: {
       inputRef,

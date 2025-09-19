@@ -67,14 +67,14 @@ export const TypingTest: React.FC = () => {
                   <div className="flex items-center">
                     <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
                     <Moon className="h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 mr-2" />
-                    <span>{theme ? theme.charAt(0).toUpperCase() + theme.slice(1) : 'Tema'}</span>
+                    <span>{theme ? theme.charAt(0).toUpperCase() + theme.slice(1) : t.theme}</span>
                   </div>
                   <span className="sr-only">Toggle theme</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="center" side="bottom" sideOffset={8} className="bg-background/80 backdrop-blur-sm">
                 <DropdownMenuItem onClick={() => setTheme("light")} className="flex items-center justify-between">
-                  <span>Light</span>
+                  <span>{t.lightTheme}</span>
                   <div className="flex gap-1">
                     <span className="block w-4 h-4 rounded-full bg-white border border-gray-200"></span>
                     <span className="block w-4 h-4 rounded-full bg-gray-200 border border-gray-300"></span>
@@ -82,7 +82,7 @@ export const TypingTest: React.FC = () => {
                   </div>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setTheme("dark")} className="flex items-center justify-between">
-                  <span>Dark</span>
+                  <span>{t.darkTheme}</span>
                   <div className="flex gap-1">
                     <span className="block w-4 h-4 rounded-full bg-gray-900 border border-gray-700"></span>
                     <span className="block w-4 h-4 rounded-full bg-gray-700 border border-gray-600"></span>
@@ -90,7 +90,7 @@ export const TypingTest: React.FC = () => {
                   </div>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setTheme("forest")} className="flex items-center justify-between">
-                  <span>Forest</span>
+                  <span>{t.forestTheme}</span>
                   <div className="flex gap-1">
                     <span className="block w-4 h-4 rounded-full bg-green-900 border border-green-700"></span>
                     <span className="block w-4 h-4 rounded-full bg-green-700 border border-green-600"></span>
@@ -98,7 +98,7 @@ export const TypingTest: React.FC = () => {
                   </div>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setTheme("rose")} className="flex items-center justify-between">
-                  <span>Rose</span>
+                  <span>{t.roseTheme}</span>
                   <div className="flex gap-1">
                     <span className="block w-4 h-4 rounded-full bg-rose-900 border border-rose-700"></span>
                     <span className="block w-4 h-4 rounded-full bg-rose-700 border border-rose-600"></span>
@@ -106,7 +106,7 @@ export const TypingTest: React.FC = () => {
                   </div>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setTheme("sunrise")} className="flex items-center justify-between">
-                  <span>Sunrise</span>
+                  <span>{t.sunriseTheme}</span>
                   <div className="flex gap-1">
                     <span className="block w-4 h-4 rounded-full bg-[#FFB347] border border-[#FF6961]"></span>
                     <span className="block w-4 h-4 rounded-full bg-[#FF6961] border border-[#FFF5E1]"></span>
@@ -114,7 +114,7 @@ export const TypingTest: React.FC = () => {
                   </div>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setTheme("matrix")} className="flex items-center justify-between">
-                  <span>Matrix</span>
+                  <span>{t.matrixTheme}</span>
                   <div className="flex gap-1">
                     <span className="block w-4 h-4 rounded-full bg-[#000000] border border-[#00FF41]"></span>
                     <span className="block w-4 h-4 rounded-full bg-[#00FF41] border border-[#0A0A0A]"></span>
@@ -122,7 +122,7 @@ export const TypingTest: React.FC = () => {
                   </div>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setTheme("pastel-spring")} className="flex items-center justify-between">
-                  <span>Pastel Spring</span>
+                  <span>{t.pastelSpringTheme}</span>
                   <div className="flex gap-1">
                     <span className="block w-4 h-4 rounded-full bg-[#FFD1DC] border border-[#B5EAD7]"></span>
                     <span className="block w-4 h-4 rounded-full bg-[#B5EAD7] border border-[#FFFDF7]"></span>
@@ -130,7 +130,7 @@ export const TypingTest: React.FC = () => {
                   </div>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setTheme("deep-ocean")} className="flex items-center justify-between">
-                  <span>Deep Ocean</span>
+                  <span>{t.deepOceanTheme}</span>
                   <div className="flex gap-1">
                     <span className="block w-4 h-4 rounded-full bg-[#003366] border border-[#00CED1]"></span>
                     <span className="block w-4 h-4 rounded-full bg-[#00CED1] border border-[#001F33]"></span>
@@ -138,7 +138,7 @@ export const TypingTest: React.FC = () => {
                   </div>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setTheme("retro-80s")} className="flex items-center justify-between">
-                  <span>Retro 80s</span>
+                  <span>{t.retro80sTheme}</span>
                   <div className="flex gap-1">
                     <span className="block w-4 h-4 rounded-full bg-[#FF00FF] border border-[#00FFFF]"></span>
                     <span className="block w-4 h-4 rounded-full bg-[#00FFFF] border border-[#1A1A40]"></span>
@@ -146,7 +146,7 @@ export const TypingTest: React.FC = () => {
                   </div>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setTheme("coffee-break")} className="flex items-center justify-between">
-                  <span>Coffee Break</span>
+                  <span>{t.coffeeBreakTheme}</span>
                   <div className="flex gap-1">
                     <span className="block w-4 h-4 rounded-full bg-[#4B3832] border border-[#D9B382]"></span>
                     <span className="block w-4 h-4 rounded-full bg-[#D9B382] border border-[#FFF8F0]"></span>
@@ -154,7 +154,7 @@ export const TypingTest: React.FC = () => {
                   </div>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setTheme("space-exploration")} className="flex items-center justify-between">
-                  <span>Space Exploration</span>
+                  <span>{t.spaceExplorationTheme}</span>
                   <div className="flex gap-1">
                     <span className="block w-4 h-4 rounded-full bg-[#0c0e19] border border-[#00e5e5]"></span>
                     <span className="block w-4 h-4 rounded-full bg-[#171b2a] border border-[#9b59ff]"></span>
@@ -162,7 +162,7 @@ export const TypingTest: React.FC = () => {
                   </div>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setTheme("minimal-white")} className="flex items-center justify-between">
-                  <span>Minimal White</span>
+                  <span>{t.minimalWhiteTheme}</span>
                   <div className="flex gap-1">
                     <span className="block w-4 h-4 rounded-full bg-[#FFFFFF] border border-[#2E2E2E]"></span>
                     <span className="block w-4 h-4 rounded-full bg-[#2E2E2E] border border-[#F5F5F5]"></span>
@@ -213,9 +213,12 @@ export const TypingTest: React.FC = () => {
 
             {/* Kontroller */}
             <TypingControls
-              onRestart={() => actions.restartTest()}
-              onChangeText={() => actions.restartTest()}
+              onRestart={actions.restartTest}
               language={state.language}
+              source={state.source}
+              onSourceChange={actions.changeSource}
+              duration={state.duration}
+              onDurationChange={actions.changeDuration}
             />
 
             {/* Sonuçlar */}
@@ -223,7 +226,7 @@ export const TypingTest: React.FC = () => {
               <TestResults
                 wpm={state.wpm}
                 accuracy={state.accuracy}
-                duration={60} // Sabit süre
+                duration={state.duration}
                 language={state.language}
               />
             )}
@@ -231,7 +234,7 @@ export const TypingTest: React.FC = () => {
 
           {/* Geçmiş kenar çubuğu */}
           <div className="lg:col-span-1">
-            <Suspense fallback={<div className="text-center p-4">Loading History...</div>}>
+            <Suspense fallback={<div className="text-center p-4">{t.loadingHistory}</div>}>
               <TypingHistory history={history} language={state.language} />
             </Suspense>
           </div>

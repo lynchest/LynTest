@@ -15,8 +15,8 @@ export const useTypingStats = (testDuration: number) => {
     if (!startTime || sessionTotalWords === 0) return { wpm: 0, accuracy: 100 };
 
     const timeElapsed = (Date.now() - startTime) / 1000 / 60; // minutes
-    const currentWpm = Math.round(sessionTotalWords / Math.max(timeElapsed, 0.01));
-    const currentAccuracy = Math.round((sessionCorrectWords / sessionTotalWords) * 100);
+    const currentWpm = Math.round(sessionCorrectWords / Math.max(timeElapsed, 0.01));
+    const currentAccuracy = sessionTotalWords > 0 ? Math.round((sessionCorrectWords / sessionTotalWords) * 100) : 100;
     
     setWpm(currentWpm);
     setAccuracy(currentAccuracy);
