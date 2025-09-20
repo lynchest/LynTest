@@ -12,9 +12,7 @@ import {
   Zap,
   TrendingUp,
   Download,
-  Share2,
-  Eye,
-  EyeOff
+  Share2
 } from 'lucide-react';
 import { translations, keyboardLayouts, type Language } from '@/lib/languages';
 
@@ -42,7 +40,6 @@ interface StatsModalProps {
 export const StatsModal: React.FC<StatsModalProps> = ({ open, stats, language, onClose }) => {
   const t = translations[language];
   const [activeTab, setActiveTab] = useState<'overview' | 'errors' | 'heatmap'>('overview');
-  const [showHeatmap, setShowHeatmap] = useState(true);
   const [exportCountdown, setExportCountdown] = useState(3);
 
   useEffect(() => {
@@ -346,73 +343,62 @@ export const StatsModal: React.FC<StatsModalProps> = ({ open, stats, language, o
                   <Keyboard className="mr-3 p-2 bg-secondary rounded-xl" size={36} />
                   Keyboard Performance Heatmap
                 </h4>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setShowHeatmap(!showHeatmap)}
-                  className="border-secondary hover:bg-secondary-hover text-foreground hover:text-foreground"
-                >
-                  {showHeatmap ? <EyeOff className="h-4 w-4 mr-2" /> : <Eye className="h-4 w-4 mr-2" />}
-                  {showHeatmap ? 'Hide' : 'Show'} Heatmap
-                </Button>
               </div>
 
-              {showHeatmap && (
-                <div className="bg-gradient-card p-10 rounded-3xl border border-card-border shadow-2xl">
-                  <div className="max-w-5xl mx-auto">
-                    {keyboardRows.map((row, rowIndex) => (
-                      <div key={rowIndex} className="flex justify-center mb-3">
-                        {row.map(key => {
-                          const keyData = stats.keyDetails.filter(k => k.key === key);
-                          const errors = stats.errorsByChar[key] || 0;
-                          
-                          return (
-                            <div
-                              key={key}
-                              className={`
-                                relative m-1 px-4 py-4 text-sm border-2 rounded-2xl font-mono font-black
-                                flex items-center justify-center cursor-pointer
-                                transform transition-all duration-300 hover:scale-110 hover:shadow-2xl hover:z-10
-                                ${key === ' ' ? 'w-40' : 'w-14 h-14'}
-                                ${getKeyColor(key)}
-                                text-white shadow-xl
-                              `}
-                              title={`Key: ${key === ' ' ? 'Space' : key.toUpperCase()}\nUsed: ${keyData.length} times\nErrors: ${errors}`}
-                            >
-                              {key === ' ' ? 'SPACE' : key.toUpperCase()}
-                              {errors > 0 && (
-                                <div className="absolute -top-2 -right-2 bg-red-600 dark:bg-red-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center font-bold shadow-lg">
-                                  {errors}
-                                </div>
-                              )}
-                            </div>
-                          );
-                        })}
-                      </div>
-                    ))}
-                  </div>
+              <div className="bg-gradient-card p-10 rounded-3xl border border-card-border shadow-2xl">
+                <div className="max-w-5xl mx-auto">
+                  {keyboardRows.map((row, rowIndex) => (
+                    <div key={rowIndex} className="flex justify-center mb-3">
+                      {row.map(key => {
+                        const keyData = stats.keyDetails.filter(k => k.key === key);
+                        const errors = stats.errorsByChar[key] || 0;
+                        
+                        return (
+                          <div
+                            key={key}
+                            className={`
+                              relative m-1 px-4 py-4 text-sm border-2 rounded-2xl font-mono font-black
+                              flex items-center justify-center cursor-pointer
+                              transform transition-all duration-300 hover:scale-110 hover:shadow-2xl hover:z-10
+                              ${key === ' ' ? 'w-40' : 'w-14 h-14'}
+                              ${getKeyColor(key)}
+                              text-white shadow-xl
+                            `}
+                            title={`Key: ${key === ' ' ? 'Space' : key.toUpperCase()}\nUsed: ${keyData.length} times\nErrors: ${errors}`}
+                          >
+                            {key === ' ' ? 'SPACE' : key.toUpperCase()}
+                            {errors > 0 && (
+                              <div className="absolute -top-2 -right-2 bg-red-600 dark:bg-red-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center font-bold shadow-lg">
+                                {errors}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ))}
+                </div>
 
-                  {/* Legend */}
-                  <div className="flex justify-center mt-10 gap-8 text-sm font-semibold">
-                    <div className="flex items-center gap-3">
-                      <div className="w-5 h-5 bg-red-500 rounded-lg shadow-md"></div>
-                    <span className="text-foreground">Errors</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <div className="w-5 h-5 bg-amber-500 rounded-lg shadow-md"></div>
-                      <span className="text-foreground">Slow</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <div className="w-5 h-5 bg-emerald-500 rounded-lg shadow-md"></div>
-                      <span className="text-foreground">Good</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <div className="w-5 h-5 bg-slate-400 rounded-lg shadow-md"></div>
-                      <span className="text-foreground">Unused</span>
-                    </div>
+                {/* Legend */}
+                <div className="flex justify-center mt-10 gap-8 text-sm font-semibold">
+                  <div className="flex items-center gap-3">
+                    <div className="w-5 h-5 bg-red-500 rounded-lg shadow-md"></div>
+                  <span className="text-foreground">Errors</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-5 h-5 bg-amber-500 rounded-lg shadow-md"></div>
+                    <span className="text-foreground">Slow</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-5 h-5 bg-emerald-500 rounded-lg shadow-md"></div>
+                    <span className="text-foreground">Good</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-5 h-5 bg-slate-400 rounded-lg shadow-md"></div>
+                    <span className="text-foreground">Unused</span>
                   </div>
                 </div>
-              )}
+              </div>
             </div>
           )}
         </div>

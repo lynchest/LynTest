@@ -70,7 +70,34 @@
     "randomWords": "Random Words",
     "literature": "Literature",
     "code": "Code",
-    "custom": "Custom"
+    "custom": "Custom",
+    "analysisModal": {
+      "triggerButton": "Analysis",
+      "title": "Performance Analysis & Insights",
+      "description": "A detailed breakdown of your last typing test.",
+      "noData": "No data to display for analysis.",
+      "performanceGrade": "Performance Grade",
+      "avgSpeed": "Avg Speed",
+      "charErrors": "Character Errors",
+      "wordErrors": "Word Errors",
+      "errors": "errors",
+      "perfect": "Perfect!",
+      "noCharErrors": "No character errors detected",
+      "excellent": "Excellent!",
+      "noWordErrors": "No word errors detected",
+      "heatmapTitle": "Keyboard Performance Heatmap",
+      "tabs": {
+        "overview": "Overview",
+        "errors": "Error Analysis",
+        "heatmap": "Keyboard Heatmap"
+      },
+      "legend": {
+        "errors": "Errors",
+        "slow": "Slow",
+        "good": "Good",
+        "unused": "Unused"
+      }
+    }
   },
   "textSources": {
     "literature": [

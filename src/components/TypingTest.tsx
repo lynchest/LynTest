@@ -21,6 +21,7 @@ import { TestResults } from './typing-test/TestResults';
 
 const TypingHistory = lazy(() => import('./TypingHistory').then(module => ({ default: module.TypingHistory })));
 const StatsModal = lazy(() => import('./StatsModal').then(module => ({ default: module.StatsModal })));
+const AnalysisModal = lazy(() => import('./AnalysisModal').then(module => ({ default: module.AnalysisModal })));
 
 export const TypingTest: React.FC = () => {
   const [detailedStats, setDetailedStats] = useState<DetailedStats | null>(null);
@@ -30,20 +31,19 @@ export const TypingTest: React.FC = () => {
   const { history, addHistoryEntry } = useTypingHistory();
   const { setTheme, theme } = useTheme();
 
-  const handleTestComplete = useCallback((stats: DetailedStats) => {
-    const finalStats: TypingStats = {
-      wpm: stats.wpm,
-      accuracy: stats.accuracy,
-      duration: stats.duration,
+  const handleTestComplete = useCallback((stats: Omit<DetailedStats, 'timestamp'>) => {
+    const statsWithTimestamp: DetailedStats = {
+      ...stats,
       timestamp: new Date(),
     };
-    addHistoryEntry(finalStats);
-    setDetailedStats(stats);
+    addHistoryEntry(statsWithTimestamp);
+    setDetailedStats(statsWithTimestamp);
     setShowStatsModal(true);
   }, [addHistoryEntry]);
 
   const { state, actions, refs } = useTypingGame(handleTestComplete);
   const t = translations[state.language];
+  const lastResult = history.length > 0 ? history[0] : null;
 
   return (
     <div className="min-h-screen bg-gradient-background font-sans">
@@ -249,7 +249,13 @@ export const TypingTest: React.FC = () => {
           </div>
 
           {/* Geçmiş kenar çubuğu */}
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1 space-y-4">
+            <div className='flex items-center justify-between'>
+              <h2 className="text-2xl font-semibold text-foreground">{t.yourProgress}</h2>
+              <Suspense fallback={null}>
+                <AnalysisModal lastResult={lastResult} language={state.language} />
+              </Suspense>
+            </div>
             <Suspense fallback={<div className="text-center p-4">{t.loadingHistory}</div>}>
               <TypingHistory history={history} language={state.language} />
             </Suspense>

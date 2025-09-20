@@ -62,7 +62,34 @@
     "randomWords": "Rastgele Kelimeler",
     "literature": "Edebiyat",
     "code": "Kod",
-    "custom": "Özel"
+    "custom": "Özel",
+    "analysisModal": {
+      "triggerButton": "Analiz",
+      "title": "Performans Analizi ve İçgörüler",
+      "description": "Son yazma testinizin detaylı bir dökümü.",
+      "noData": "Analiz için görüntülenecek bir veri yok.",
+      "performanceGrade": "Performans Notu",
+      "avgSpeed": "Ort. Hız",
+      "charErrors": "Karakter Hataları",
+      "wordErrors": "Kelime Hataları",
+      "errors": "hata",
+      "perfect": "Mükemmel!",
+      "noCharErrors": "Hiç karakter hatası bulunamadı",
+      "excellent": "Olağanüstü!",
+      "noWordErrors": "Hiç kelime hatası bulunamadı",
+      "heatmapTitle": "Klavye Performans Isı Haritası",
+      "tabs": {
+        "overview": "Genel Bakış",
+        "errors": "Hata Analizi",
+        "heatmap": "Klavye Isı Haritası"
+      },
+      "legend": {
+        "errors": "Hatalar",
+        "slow": "Yavaş",
+        "good": "İyi",
+        "unused": "Kullanılmadı"
+      }
+    }
   },
   "textSources": {
     "literature": [

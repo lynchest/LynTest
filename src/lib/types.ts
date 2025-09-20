@@ -17,4 +17,5 @@ export interface DetailedStats {
   errorsByWord: Record<string, number>;
   keyDetails: Array<{key: string; time: number; error: boolean}>;
   avgTimePerChar: number;
+  timestamp: Date;
 }
