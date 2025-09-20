@@ -69,7 +69,8 @@
     "loadingHistory": "Loading History...",
     "randomWords": "Random Words",
     "literature": "Literature",
-    "code": "Code"
+    "code": "Code",
+    "custom": "Custom"
   },
   "textSources": {
     "literature": [

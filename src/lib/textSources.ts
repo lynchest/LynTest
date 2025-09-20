@@ -46,6 +46,9 @@ export const textSources = (language: Language) => ({
     const randomIndex = Math.floor(Math.random() * codeSnippets.length);
     return Promise.resolve(codeSnippets[randomIndex]);
   },
+  custom: (customText?: string) => {
+    return Promise.resolve(customText || '');
+  },
 });
 
 export type TextSource = keyof ReturnType<typeof textSources>;
@@ -56,5 +59,6 @@ export const getTextSourceOptions = (language: Language) => {
     { value: "literature", label: t.literature },
     { value: "randomWords", label: t.randomWords },
     { value: "code", label: t.code },
+    { value: "custom", label: t.custom },
   ];
 };

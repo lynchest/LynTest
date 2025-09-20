@@ -61,7 +61,8 @@
     "loadingHistory": "Geçmiş Yükleniyor...",
     "randomWords": "Rastgele Kelimeler",
     "literature": "Edebiyat",
-    "code": "Kod"
+    "code": "Kod",
+    "custom": "Özel"
   },
   "textSources": {
     "literature": [

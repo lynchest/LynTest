@@ -115,7 +115,7 @@ export const TypingTextDisplay: React.FC<TypingTextDisplayProps> = memo(({
   typedWordsInLine,
   userInput,
 }) => {
-  if (!lines?.length) {
+  if (!lines || lines.flat().length === 0) {
     return (
       <div className="text-2xl leading-relaxed font-mono tracking-wide select-none min-h-[6rem] flex items-center justify-center text-foreground-muted">
         No text to display

@@ -1,6 +1,7 @@
 import React, { useState, lazy, Suspense, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { Textarea } from '@/components/ui/textarea';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Languages, Moon, Sun } from 'lucide-react';
 import { MetricsDisplay } from './MetricsDisplay';
@@ -24,6 +25,7 @@ const StatsModal = lazy(() => import('./StatsModal').then(module => ({ default: 
 export const TypingTest: React.FC = () => {
   const [detailedStats, setDetailedStats] = useState<DetailedStats | null>(null);
   const [showStatsModal, setShowStatsModal] = useState(false);
+  const [customText, setCustomText] = useState('');
   
   const { history, addHistoryEntry } = useTypingHistory();
   const { setTheme, theme } = useTheme();
@@ -220,6 +222,20 @@ export const TypingTest: React.FC = () => {
               duration={state.duration}
               onDurationChange={actions.changeDuration}
             />
+
+            {state.source === 'custom' && (
+              <div className="mt-4 space-y-4">
+                <Textarea
+                  placeholder={t.typeTextAbove}
+                  value={customText}
+                  onChange={(e) => setCustomText(e.target.value)}
+                  className="w-full h-32 bg-gradient-card border-card-border"
+                />
+                <Button onClick={() => actions.startCustomTest(customText)} disabled={!customText.trim()}>
+                  {t.startTest}
+                </Button>
+              </div>
+            )}
 
             {/* Sonuçlar */}
             {state.isCompleted && (

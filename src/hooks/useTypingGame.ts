@@ -171,6 +171,27 @@ export const useTypingGame = (onTestComplete: (stats: DetailedStats) => void) =>
     setDuration(newDuration);
   };
 
+  const startCustomTest = (customText: string) => {
+    setIsActive(false);
+    setIsCompleted(false);
+    setTimeLeft(duration);
+    setStartTime(null);
+    setHasTestCompletedBeenCalled(false);
+    stats.resetStats();
+    
+    const processedText = customText.split('\n').map(line => line.trim())
+                                    .filter(line => line.length > 0)
+                                    .map(line => line.split(/\s+/).filter(word => word.length > 0));
+    setAllTextLines(processedText);
+    setCurrentLineIndexInAllText(0);
+    setCurrentWordIndex(0);
+    setTypedWordsInLine([]);
+    setUserInput('');
+    
+    // Metin yüklendikten sonra testi başlat
+    startTest();
+  };
+
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (!isActive) {
       startTest();
@@ -263,6 +284,7 @@ export const useTypingGame = (onTestComplete: (stats: DetailedStats) => void) =>
       handleInputChange,
       changeSource,
       changeDuration,
+      startCustomTest,
     },
     refs: {
       inputRef,
