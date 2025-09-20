@@ -543,9 +543,9 @@ For more information on the theming strategy, refer to the project documentation
     --foreground-muted: 0 0% 80%;
     --foreground-subtle: 0 0% 60%;
 
-    --card: 300 100% 50%;
+    --card: 240 30% 25% / 0.5;
     --card-foreground: 0 0% 100%;
-    --card-border: 180 100% 50%;
+    --card-border: 180 100% 50% / 0.5;
 
     --primary: 180 100% 50%;
     --primary-foreground: 0 0% 100%;
@@ -571,16 +571,16 @@ For more information on the theming strategy, refer to the project documentation
     --warning-foreground: 0 0% 100%;
     --warning-subtle: 45 30% 80%;
 
-    --border: 180 100% 50%;
-    --input: 300 100% 50%;
-    --input-border: 180 100% 50%;
+    --border: 180 100% 50% / 0.5;
+    --input: 240 30% 25% / 0.5;
+    --input-border: 180 100% 50% / 0.5;
     --ring: 180 100% 50%;
 
     --radius: 0.75rem;
 
-    --gradient-primary: linear-gradient(135deg, hsl(180 100% 50%), hsl(300 100% 50%));
+    --gradient-primary: none;
     --gradient-background: linear-gradient(180deg, hsl(240 44% 18%), hsl(300 100% 50%));
-    --gradient-card: linear-gradient(135deg, hsl(300 100% 50%), hsl(180 100% 50%));
+    --gradient-card: none;
 
     --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.1);
     --shadow-md: 0 4px 6px -1px hsl(0 0% 0% / 0.1);
