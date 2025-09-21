@@ -38,5 +38,3 @@ dist-ssr
 # Environment variables
 .env*
 !.env.example
-
-package-lock.json
