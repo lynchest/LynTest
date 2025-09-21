@@ -29,15 +29,34 @@ const StorageUpdateManager = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     // Check for application version mismatch
     const storedVersion = localStorage.getItem('appStorageVersion');
-    if (storedVersion !== APP_STORAGE_VERSION) {
+
+    // Function to parse version string into major, minor, patch
+    const parseVersion = (versionString: string | null) => {
+      if (!versionString) return { major: 0, minor: 0, patch: 0 };
+      const parts = versionString.split('.').map(Number);
+      return {
+        major: parts[0] || 0,
+        minor: parts[1] || 0,
+        patch: parts[2] || 0,
+      };
+    };
+
+    const currentAppVersion = parseVersion(APP_STORAGE_VERSION);
+    const storedAppVersion = parseVersion(storedVersion);
+
+    // Check if major version has changed
+    if (currentAppVersion.major > storedAppVersion.major) {
       setIsUpdateRequired(true);
-      
+
       // Apply theme from localStorage to make the update page match the user's theme
       const storedTheme = localStorage.getItem('theme');
       if (storedTheme) {
         // next-themes stores the theme with quotes, so we remove them.
         document.documentElement.className = storedTheme.replace(/"/g, '');
       }
+    } else if (!storedVersion) {
+      // If no version is stored, it's the first load or a fresh install, so set the current version
+      localStorage.setItem('appStorageVersion', APP_STORAGE_VERSION);
     }
   }, []);
 
