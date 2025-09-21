@@ -58,7 +58,7 @@ Projeyi yerel makinenizde çalıştırmak için aşağıdaki adımları izleyin:
 
 ## Katkıda Bulunma
 
-LynTest projesine katkıda bulunmak ister misiniz? Katkılarınızı memnuniyetle karşılarız! Lütfen `CONTRIBUTING.md` dosyasını inceleyerek nasıl katkıda bulunabileceğinizi öğrenin.
+Bağış alabilmem için 18 yaşımı doldurmam gerekiyor, onun yerine projeye katkıda bulunarak bana destek olabilirsiniz! Katkılarınızı memnuniyetle karşılarız! Lütfen `CONTRIBUTING.md` dosyasını inceleyerek nasıl katkıda bulunabileceğinizi öğrenin.
 
 ## Lisans
 
