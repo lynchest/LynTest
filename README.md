@@ -8,11 +8,16 @@ LynTest, kullanıcıların yazma hızlarını ve doğruluklarını test etmeleri
 
 ## Özellikler
 
-- **Hız ve Doğruluk Testleri:** Kullanıcıların WPM (dakika başına kelime) ve doğruluk oranlarını ölçer.
-- **Çoklu Dil Desteği:** Farklı dillerde metin kaynakları sunar.
-- **Geçmiş Takibi:** Önceki test sonuçlarını kaydeder ve ilerlemeyi gösterir.
-- **Duyarlı Tasarım:** Masaüstü ve mobil cihazlarda sorunsuz bir deneyim sunar.
-- **Özelleştirilebilir Ayarlar:** Kullanıcıların test tercihlerini ayarlamasına olanak tanır.
+- **Kapsamlı Yazma Testleri:** Kullanıcıların WPM (dakika başına kelime), doğruluk oranları ve ham WPM gibi metriklerle yazma hızlarını ve doğruluklarını detaylı bir şekilde ölçer.
+- **Çoklu Dil ve Metin Kaynağı Desteği:** Farklı dillerde (Türkçe, İngilizce vb.) ve çeşitli metin kaynaklarından (rastgele kelimeler, alıntılar, kod parçacıkları) test yapma imkanı sunar.
+- **Detaylı Performans Analizi:** Her test sonrası kapsamlı istatistikler ve analizler sunarak kullanıcıların güçlü ve zayıf yönlerini anlamalarına yardımcı olur.
+- **Yazma Geçmişi ve İlerleme Takibi:** Önceki test sonuçlarını kaydeder, grafiklerle ilerlemeyi görselleştirir ve zaman içindeki gelişimi takip etme olanağı sağlar.
+- **Duyarlı ve Modern Arayüz:** Masaüstü, tablet ve mobil cihazlarda sorunsuz ve estetik bir deneyim sunan duyarlı tasarım.
+- **Esnek Özelleştirilebilir Ayarlar:** Kullanıcıların test süresi, metin uzunluğu, dil, tema ve diğer tercihleri kişiselleştirmesine olanak tanır.
+- **Kullanıcı Dostu Kontroller:** Test sırasında kolayca yeniden başlatma, atlama ve ayarları değiştirme gibi işlevler sunar.
+- **Erişilebilirlik Odaklı Tasarım:** `shadcn-ui` bileşenleri sayesinde erişilebilirlik standartlarına uygun bir kullanıcı deneyimi sağlar.
+- **Sağlam Test Altyapısı:** Uygulamanın kararlılığını ve doğruluğunu garanti eden kapsamlı birim ve uçtan uca testler (`Cypress`, `Jest`, `React Testing Library`).
+- **Gizlilik Odaklı:** Tüm kullanıcı verileri (yazma geçmişi, ayarlar vb.) yalnızca yerel depolamada saklanır ve hiçbir sunucuya gönderilmez.
 
 ## Teknolojiler
 
