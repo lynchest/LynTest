@@ -391,11 +391,17 @@ const GoalsTab: React.FC<{ stats: DetailedStats | null, t: typeof translations[L
 const chartConfig = {
   wpm: {
     label: "WPM",
-    color: "hsl(var(--chart-1))",
+    theme: {
+      light: "hsl(210 40% 39%)", // Mavi tonu
+      dark: "hsl(210 40% 70%)",  // Açık mavi tonu
+    },
   },
   accuracy: {
     label: "Accuracy",
-    color: "hsl(var(--chart-2))",
+    theme: {
+      light: "hsl(142 71% 45%)", // Yeşil tonu
+      dark: "hsl(142 71% 65%)",  // Açık yeşil tonu
+    },
   },
 } satisfies ChartConfig
 
@@ -458,8 +464,8 @@ const ProgressChart: React.FC<{ history: DetailedStats[], t: typeof translations
               cursor={{ stroke: 'hsl(var(--muted-foreground))', strokeWidth: 1, strokeDasharray: '3 3' }}
             />
             <Legend verticalAlign="top" height={36} />
-            <Line yAxisId="left" dataKey="wpm" type="monotone" stroke="var(--color-wpm)" strokeWidth={2} dot={{ r: 4, fill: 'hsl(var(--background))', stroke: 'var(--color-wpm)' }} activeDot={{ r: 6 }} />
-            <Line yAxisId="right" dataKey="accuracy" type="monotone" stroke="var(--color-accuracy)" strokeWidth={2} dot={{ r: 4, fill: 'hsl(var(--background))', stroke: 'var(--color-accuracy)' }} activeDot={{ r: 6 }} />
+            <Line yAxisId="left" dataKey="wpm" type="monotone" stroke="var(--color-wpm)" strokeWidth={3} dot={{ r: 5, fill: 'var(--color-wpm)', stroke: 'var(--color-wpm)' }} activeDot={{ r: 8 }} />
+            <Line yAxisId="right" dataKey="accuracy" type="monotone" stroke="var(--color-accuracy)" strokeWidth={3} dot={{ r: 5, fill: 'var(--color-accuracy)', stroke: 'var(--color-accuracy)' }} activeDot={{ r: 8 }} />
           </LineChart>
         </ChartContainer>
       </div>
