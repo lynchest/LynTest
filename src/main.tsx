@@ -45,7 +45,7 @@ const StorageUpdateManager = ({ children }: { children: ReactNode }) => {
     const storedAppVersion = parseVersion(storedVersion);
 
     // Check if major version has changed
-    if (currentAppVersion.major > storedAppVersion.major) {
+    if (storedVersion && currentAppVersion.major > storedAppVersion.major) {
       setIsUpdateRequired(true);
 
       // Apply theme from localStorage to make the update page match the user's theme
