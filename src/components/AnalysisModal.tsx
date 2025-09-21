@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -7,6 +7,15 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Progress } from '@/components/ui/progress';
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig,
+} from "@/components/ui/chart"
+import { Line, LineChart, CartesianGrid, XAxis, YAxis, Tooltip } from "recharts";
 import {
   BarChart3,
   CheckCircle,
@@ -17,19 +26,26 @@ import {
   Target,
   Zap,
   TrendingUp,
-  BarChart
+  BarChart,
+  Hand,
+  Goal,
+  FileText,
+  ArrowLeftRight
 } from 'lucide-react';
 import { translations, keyboardLayouts, type Language } from '@/lib/languages';
 import { DetailedStats } from '@/lib/types';
 
 interface AnalysisModalProps {
   lastResult: DetailedStats | null;
+  history: DetailedStats[];
   language: Language;
 }
 
-export const AnalysisModal: React.FC<AnalysisModalProps> = ({ lastResult: stats, language }) => {
+type Tab = 'overview' | 'errors' | 'heatmap' | 'progress' | 'fingerAnalysis' | 'goals';
+
+export const AnalysisModal: React.FC<AnalysisModalProps> = ({ lastResult: stats, history, language }) => {
   const t = translations[language];
-  const [activeTab, setActiveTab] = React.useState<'overview' | 'errors' | 'heatmap'>('overview');
+  const [activeTab, setActiveTab] = useState<Tab>('overview');
 
   const getPerformanceGrade = useMemo(() => {
     if (!stats) return { grade: 'N/A', color: 'text-slate-500', bg: 'bg-slate-100 dark:bg-slate-800', border: 'border-slate-200 dark:border-slate-700' };
@@ -99,10 +115,13 @@ export const AnalysisModal: React.FC<AnalysisModalProps> = ({ lastResult: stats,
               </DialogTitle>
             </DialogHeader>
 
-            <div className="flex gap-2 p-2 bg-secondary rounded-2xl flex-shrink-0">
+            <div className="flex gap-2 p-2 bg-secondary rounded-2xl flex-shrink-0 overflow-x-auto">
               <TabButton tab="overview" label={t.analysisModal.tabs.overview} icon={BarChart3} />
               <TabButton tab="errors" label={t.analysisModal.tabs.errors} icon={XCircle} />
               <TabButton tab="heatmap" label={t.analysisModal.tabs.heatmap} icon={Keyboard} />
+              <TabButton tab="progress" label={t.analysisModal.tabs.progress} icon={TrendingUp} />
+              <TabButton tab="fingerAnalysis" label={t.analysisModal.tabs.fingerAnalysis} icon={Hand} />
+              <TabButton tab="goals" label={t.analysisModal.tabs.goals} icon={Goal} />
             </div>
 
             <div className="overflow-y-auto flex-1 p-1 scrollbar-thin scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-600">
@@ -139,10 +158,44 @@ export const AnalysisModal: React.FC<AnalysisModalProps> = ({ lastResult: stats,
                       <div className="text-sm font-bold text-orange-700 dark:text-orange-300 mb-1">{t.analysisModal.avgSpeed}</div>
                     </div>
                   </div>
+                  <div className="bg-gradient-card p-8 rounded-3xl border border-card-border">
+                    <h4 className="text-xl font-bold flex items-center mb-6 text-cyan-700 dark:text-cyan-400"><FileText className="mr-3 p-2 bg-secondary rounded-xl" size={32} />Text Difficulty</h4>
+                    <div className="grid grid-cols-3 gap-4 text-center">
+                      <div>
+                        <div className="text-3xl font-black text-cyan-600 dark:text-cyan-400">{stats.difficultyAnalysis.averageWordLength.toFixed(1)}</div>
+                        <div className="text-sm font-semibold text-cyan-700 dark:text-cyan-300">Avg. Word Length</div>
+                      </div>
+                      <div>
+                        <div className="text-3xl font-black text-cyan-600 dark:text-cyan-400">{stats.difficultyAnalysis.punctuationCount}</div>
+                        <div className="text-sm font-semibold text-cyan-700 dark:text-cyan-300">Punctuation</div>
+                      </div>
+                      <div>
+                        <div className="text-3xl font-black text-cyan-600 dark:text-cyan-400">{stats.difficultyAnalysis.numberCount}</div>
+                        <div className="text-sm font-semibold text-cyan-700 dark:text-cyan-300">Numbers</div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               )}
               {activeTab === 'errors' && (
                 <div className="space-y-8 p-2">
+                  <div className="bg-gradient-card p-8 rounded-3xl border border-card-border mb-8">
+                      <h4 className="text-xl font-bold flex items-center mb-6 text-violet-700 dark:text-violet-400"><ArrowLeftRight className="mr-3 p-2 bg-secondary rounded-xl" size={32} />Error Types</h4>
+                      <div className="grid grid-cols-3 gap-4 text-center">
+                        <div>
+                          <div className="text-3xl font-black text-violet-600 dark:text-violet-400">{stats.backspaceCount}</div>
+                          <div className="text-sm font-semibold text-violet-700 dark:text-violet-300">Backspaces</div>
+                        </div>
+                        <div>
+                          <div className="text-3xl font-black text-violet-600 dark:text-violet-400">{stats.extraChars}</div>
+                          <div className="text-sm font-semibold text-violet-700 dark:text-violet-300">Extra Characters</div>
+                        </div>
+                        <div>
+                          <div className="text-3xl font-black text-violet-600 dark:text-violet-400">{stats.missedChars}</div>
+                          <div className="text-sm font-semibold text-violet-700 dark:text-violet-300">Missed Characters</div>
+                        </div>
+                      </div>
+                  </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="bg-gradient-card p-8 rounded-3xl border border-card-border">
                       <h4 className="text-xl font-bold flex items-center mb-6 text-red-700 dark:text-red-400"><Keyboard className="mr-3 p-2 bg-secondary rounded-xl" size={32} />{t.analysisModal.charErrors}</h4>
@@ -214,6 +267,44 @@ Errors: ${errors}`}
                   </div>
                 </div>
               )}
+              {activeTab === 'progress' && (
+                <ProgressChart history={history} t={t} />
+              )}
+              {activeTab === 'fingerAnalysis' && (
+                <div className="space-y-8 p-2">
+                  <div className="bg-gradient-card p-8 rounded-3xl border border-card-border">
+                    <h4 className="text-xl font-bold flex items-center mb-6 text-teal-700 dark:text-teal-400"><Hand className="mr-3 p-2 bg-secondary rounded-xl" size={32} />Finger Performance</h4>
+                    <div className="space-y-4">
+                      {(Object.keys(stats.fingerStats) as (keyof typeof stats.fingerStats)[]).map((finger) => {
+                        const fingerStat = stats.fingerStats[finger];
+                        if (fingerStat.totalChars === 0) return null;
+                        return (
+                          <div key={finger} className="flex justify-between items-center bg-secondary p-4 rounded-2xl border border-card-border">
+                            <span className="font-semibold text-lg capitalize text-teal-800 dark:text-teal-300">{finger.replace(/([A-Z])/g, ' $1').trim()}</span>
+                            <div className="flex gap-6 text-right">
+                              <div className="w-28">
+                                <span className="font-black text-lg text-foreground">{fingerStat.totalChars}</span>
+                                <span className="text-xs text-foreground-muted ml-1">chars</span>
+                              </div>
+                              <div className="w-28">
+                                <span className="font-black text-lg text-red-600 dark:text-red-400">{fingerStat.errors}</span>
+                                <span className="text-xs text-foreground-muted ml-1">errors</span>
+                              </div>
+                              <div className="w-28">
+                                <span className="font-black text-lg text-blue-600 dark:text-blue-400">{formatTime(fingerStat.speed)}</span>
+                                <span className="text-xs text-foreground-muted ml-1">avg speed</span>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              )}
+              {activeTab === 'goals' && (
+                <GoalsTab stats={stats} t={t} />
+              )}
             </div>
           </>
         ) : (
@@ -223,5 +314,128 @@ Errors: ${errors}`}
         )}
       </DialogContent>
     </Dialog>
+  );
+};
+
+const GoalsTab: React.FC<{ stats: DetailedStats | null, t: typeof translations[Language] }> = ({ stats, t }) => {
+  const [wpmGoal, setWpmGoal] = useState(() => parseInt(localStorage.getItem('wpmGoal') || '80', 10));
+  const [accuracyGoal, setAccuracyGoal] = useState(() => parseInt(localStorage.getItem('accuracyGoal') || '98', 10));
+
+  React.useEffect(() => {
+    localStorage.setItem('wpmGoal', String(wpmGoal));
+  }, [wpmGoal]);
+
+  React.useEffect(() => {
+    localStorage.setItem('accuracyGoal', String(accuracyGoal));
+  }, [accuracyGoal]);
+
+  const wpmProgress = stats ? Math.min((stats.wpm / wpmGoal) * 100, 100) : 0;
+  const accuracyProgress = stats ? Math.min((stats.accuracy / accuracyGoal) * 100, 100) : 0;
+
+  return (
+    <div className="space-y-8 p-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="bg-gradient-card p-8 rounded-3xl border border-card-border">
+          <h4 className="text-xl font-bold flex items-center mb-6 text-lime-700 dark:text-lime-400"><Goal className="mr-3 p-2 bg-secondary rounded-xl" size={32} />{t.analysisModal.setGoals}</h4>
+          <div className="space-y-4">
+            <div>
+              <label htmlFor="wpm-goal" className="block text-sm font-medium text-foreground-muted mb-2">{t.analysisModal.wpmGoal}</label>
+              <Input
+                id="wpm-goal"
+                type="number"
+                value={wpmGoal}
+                onChange={(e) => setWpmGoal(parseInt(e.target.value, 10) || 0)}
+                className="bg-secondary border-card-border"
+              />
+            </div>
+            <div>
+              <label htmlFor="accuracy-goal" className="block text-sm font-medium text-foreground-muted mb-2">{t.analysisModal.accuracyGoal}</label>
+              <Input
+                id="accuracy-goal"
+                type="number"
+                value={accuracyGoal}
+                onChange={(e) => setAccuracyGoal(parseInt(e.target.value, 10) || 0)}
+                className="bg-secondary border-card-border"
+              />
+            </div>
+          </div>
+        </div>
+        <div className="bg-gradient-card p-8 rounded-3xl border border-card-border">
+          <h4 className="text-xl font-bold flex items-center mb-6 text-lime-700 dark:text-lime-400"><TrendingUp className="mr-3 p-2 bg-secondary rounded-xl" size={32} />{t.analysisModal.progressTowardsGoals}</h4>
+          {stats ? (
+            <div className="space-y-6">
+              <div>
+                <div className="flex justify-between mb-2">
+                  <span className="font-semibold">WPM</span>
+                  <span className="font-bold">{stats.wpm} / {wpmGoal}</span>
+                </div>
+                <Progress value={wpmProgress} className="w-full" />
+              </div>
+              <div>
+                <div className="flex justify-between mb-2">
+                  <span className="font-semibold">Accuracy</span>
+                  <span className="font-bold">{stats.accuracy}% / {accuracyGoal}%</span>
+                </div>
+                <Progress value={accuracyProgress} className="w-full" />
+              </div>
+            </div>
+          ) : (
+            <p className="text-center text-foreground-muted">{t.analysisModal.completeTestForProgress}</p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const chartConfig = {
+  wpm: {
+    label: "WPM",
+    color: "hsl(var(--chart-1))",
+  },
+  accuracy: {
+    label: "Accuracy",
+    color: "hsl(var(--chart-2))",
+  },
+} satisfies ChartConfig
+
+const ProgressChart: React.FC<{ history: DetailedStats[], t: typeof translations[Language] }> = ({ history, t }) => {
+  const chartData = useMemo(() => {
+    return history
+      .slice()
+      .reverse()
+      .map((entry) => ({
+        date: new Date(entry.timestamp).toLocaleDateString(),
+        wpm: entry.wpm,
+        accuracy: entry.accuracy,
+      }));
+  }, [history]);
+
+  if (history.length < 2) {
+    return (
+      <div className="p-4 text-center">
+        <h3 className="text-lg font-semibold">{t.analysisModal.notEnoughData}</h3>
+        <p className="text-sm text-foreground-muted">{t.analysisModal.completeTwoTestsForProgress}</p>
+      </div>
+    )
+  }
+
+  return (
+    <div className="space-y-8 p-2">
+      <div className="bg-gradient-card p-8 rounded-3xl border border-card-border">
+        <h4 className="text-xl font-bold flex items-center mb-6 text-indigo-700 dark:text-indigo-400"><TrendingUp className="mr-3 p-2 bg-secondary rounded-xl" size={32} />Performance Over Time</h4>
+        <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
+          <LineChart data={chartData}>
+            <CartesianGrid vertical={false} />
+            <XAxis dataKey="date" tickLine={false} axisLine={false} tickMargin={8} />
+            <YAxis yAxisId="left" orientation="left" />
+            <YAxis yAxisId="right" orientation="right" />
+            <Tooltip content={<ChartTooltipContent />} />
+            <Line yAxisId="left" dataKey="wpm" type="monotone" stroke="var(--color-wpm)" strokeWidth={2} dot={false} />
+            <Line yAxisId="right" dataKey="accuracy" type="monotone" stroke="var(--color-accuracy)" strokeWidth={2} dot={false} />
+          </LineChart>
+        </ChartContainer>
+      </div>
+    </div>
   );
 };

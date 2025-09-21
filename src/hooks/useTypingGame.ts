@@ -41,7 +41,7 @@ export const useTypingGame = (onTestComplete: (stats: DetailedStats) => void) =>
   const inputRef = useRef<HTMLInputElement>(null);
   const lastChangeTime = useRef<number | null>(null);
 
-  const stats = useTypingStats(duration);
+  const stats = useTypingStats(duration, language);
 
   const loadAndProcessText = useCallback(async (src: TextSource, lang: Language) => {
     let rawText: string;
@@ -103,12 +103,13 @@ export const useTypingGame = (onTestComplete: (stats: DetailedStats) => void) =>
     if (isCompleted && !hasTestCompletedBeenCalled) {
       const { wpm, accuracy } = stats.calculateMetrics(startTime);
       if (wpm > 0) {
-        const detailed = stats.generateDetailedStats(startTime, wpm, accuracy);
+        const sourceText = allTextLines.map(line => line.join(' ')).join('\n');
+        const detailed = stats.generateDetailedStats(wpm, accuracy, sourceText);
         onTestComplete(detailed);
         setHasTestCompletedBeenCalled(true);
       }
     }
-  }, [isCompleted, onTestComplete, startTime, stats, hasTestCompletedBeenCalled]);
+  }, [isCompleted, onTestComplete, startTime, stats, hasTestCompletedBeenCalled, allTextLines]);
 
   const startTest = () => {
     if (isCompleted) return;

@@ -32,6 +32,17 @@
     ["z", "x", "c", "v", "b", "n", "m", ",", ".", "/"],
     [" "]
   ],
+  "fingerMapping": {
+    "`": "leftPinky", "1": "leftPinky", "2": "leftRing", "3": "leftMiddle", "4": "leftIndex", "5": "leftIndex",
+    "6": "rightIndex", "7": "rightIndex", "8": "rightMiddle", "9": "rightRing", "0": "rightPinky", "-": "rightPinky", "=": "rightPinky",
+    "q": "leftPinky", "w": "leftRing", "e": "leftMiddle", "r": "leftIndex", "t": "leftIndex",
+    "y": "rightIndex", "u": "rightIndex", "i": "rightMiddle", "o": "rightRing", "p": "rightPinky", "[": "rightPinky", "]": "rightPinky", "\\": "rightPinky",
+    "a": "leftPinky", "s": "leftRing", "d": "leftMiddle", "f": "leftIndex", "g": "leftIndex",
+    "h": "rightIndex", "j": "rightIndex", "k": "rightMiddle", "l": "rightRing", ";": "rightPinky", "'": "rightPinky",
+    "z": "leftPinky", "x": "leftRing", "c": "leftMiddle", "v": "leftIndex", "b": "leftIndex",
+    "n": "rightIndex", "m": "rightIndex", ",": "rightMiddle", ".": "rightRing", "/": "rightPinky",
+    " ": "leftThumb"
+  },
   "translations": {
     "title": "LynTest",
     "subtitle": "Test and improve your typing speed",
@@ -89,14 +100,24 @@
       "tabs": {
         "overview": "Overview",
         "errors": "Error Analysis",
-        "heatmap": "Keyboard Heatmap"
+        "heatmap": "Keyboard Heatmap",
+        "progress": "Progress",
+        "fingerAnalysis": "Finger Analysis",
+        "goals": "Goals"
       },
       "legend": {
         "errors": "Errors",
         "slow": "Slow",
         "good": "Good",
         "unused": "Unused"
-      }
+      },
+      "setGoals": "Set Your Goals",
+      "wpmGoal": "WPM Goal",
+      "accuracyGoal": "Accuracy Goal (%)",
+      "progressTowardsGoals": "Progress Towards Goals",
+      "completeTestForProgress": "Complete a test to see your progress.",
+      "notEnoughData": "Not Enough Data",
+      "completeTwoTestsForProgress": "Complete at least two tests to see your progress chart."
     }
   },
   "textSources": {

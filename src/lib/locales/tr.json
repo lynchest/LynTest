@@ -24,6 +24,17 @@
     ["z", "x", "c", "v", "b", "n", "m", "ö", "ç", "."],
     [" "]
   ],
+  "fingerMapping": {
+    "é": "leftPinky", "1": "leftPinky", "2": "leftRing", "3": "leftMiddle", "4": "leftIndex", "5": "leftIndex",
+    "6": "rightIndex", "7": "rightIndex", "8": "rightMiddle", "9": "rightRing", "0": "rightPinky", "-": "rightPinky", "=": "rightPinky",
+    "q": "leftPinky", "w": "leftRing", "e": "leftMiddle", "r": "leftIndex", "t": "leftIndex",
+    "y": "rightIndex", "u": "rightIndex", "ı": "rightMiddle", "o": "rightRing", "p": "rightPinky", "ğ": "rightPinky", "ü": "rightPinky",
+    "a": "leftPinky", "s": "leftRing", "d": "leftMiddle", "f": "leftIndex", "g": "leftIndex",
+    "h": "rightIndex", "j": "rightIndex", "k": "rightMiddle", "l": "rightRing", "ş": "rightPinky", "i": "rightPinky", ",": "rightPinky",
+    "z": "leftPinky", "x": "leftRing", "c": "leftMiddle", "v": "leftIndex", "b": "leftIndex",
+    "n": "rightIndex", "m": "rightIndex", "ö": "rightMiddle", "ç": "rightRing", ".": "rightPinky",
+    " ": "leftThumb"
+  },
   "translations": {
     "title": "LynTest",
     "subtitle": "Klavye yazma hızınızı test edin ve geliştirin",
@@ -81,14 +92,24 @@
       "tabs": {
         "overview": "Genel Bakış",
         "errors": "Hata Analizi",
-        "heatmap": "Klavye Isı Haritası"
+        "heatmap": "Klavye Isı Haritası",
+        "progress": "İlerleme",
+        "fingerAnalysis": "Parmak Analizi",
+        "goals": "Hedefler"
       },
       "legend": {
         "errors": "Hatalar",
         "slow": "Yavaş",
         "good": "İyi",
         "unused": "Kullanılmadı"
-      }
+      },
+      "setGoals": "Hedeflerinizi Belirleyin",
+      "wpmGoal": "DKD Hedefi",
+      "accuracyGoal": "Doğruluk Hedefi (%)",
+      "progressTowardsGoals": "Hedeflere Doğru İlerleme",
+      "completeTestForProgress": "İlerlemenizi görmek için bir testi tamamlayın.",
+      "notEnoughData": "Yeterli Veri Yok",
+      "completeTwoTestsForProgress": "İlerleme grafiğinizi görmek için en az iki testi tamamlayın."
     }
   },
   "textSources": {

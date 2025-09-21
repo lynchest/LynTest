@@ -253,7 +253,7 @@ export const TypingTest: React.FC = () => {
             <div className='flex items-center justify-between'>
               <h2 className="text-2xl font-semibold text-foreground">{t.yourProgress}</h2>
               <Suspense fallback={null}>
-                <AnalysisModal lastResult={lastResult} language={state.language} />
+                <AnalysisModal lastResult={lastResult} history={history} language={state.language} />
               </Suspense>
             </div>
             <Suspense fallback={<div className="text-center p-4">{t.loadingHistory}</div>}>

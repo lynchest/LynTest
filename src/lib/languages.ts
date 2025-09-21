@@ -11,6 +11,11 @@ export const keyboardLayouts = {
   tr: trData.keyboardLayout,
 };
 
+export const fingerMappings = {
+  en: enData.fingerMapping,
+  tr: trData.fingerMapping,
+};
+
 export const translations = {
   en: enData.translations,
   tr: trData.translations,

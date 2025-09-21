@@ -26,7 +26,7 @@ export const useTypingHistory = () => {
   }, [history]);
 
   const addHistoryEntry = (stats: DetailedStats) => {
-    setHistory(prev => [stats, ...prev.slice(0, 9)]);
+    setHistory(prev => [stats, ...prev.slice(0, 29)]);
   };
 
   return { history, addHistoryEntry };
