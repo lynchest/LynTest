@@ -15,7 +15,7 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart"
-import { Line, LineChart, CartesianGrid, XAxis, YAxis, Tooltip } from "recharts";
+import { Line, LineChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import {
   BarChart3,
   CheckCircle,
@@ -401,11 +401,12 @@ const chartConfig = {
 
 const ProgressChart: React.FC<{ history: DetailedStats[], t: typeof translations[Language] }> = ({ history, t }) => {
   const chartData = useMemo(() => {
-    return history
+    const limitedHistory = history.slice(-30);
+    return limitedHistory
       .slice()
       .reverse()
       .map((entry) => ({
-        date: new Date(entry.timestamp).toLocaleDateString(),
+        date: new Date(entry.timestamp).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }),
         wpm: entry.wpm,
         accuracy: entry.accuracy,
       }));
@@ -424,15 +425,41 @@ const ProgressChart: React.FC<{ history: DetailedStats[], t: typeof translations
     <div className="space-y-8 p-2">
       <div className="bg-gradient-card p-8 rounded-3xl border border-card-border">
         <h4 className="text-xl font-bold flex items-center mb-6 text-indigo-700 dark:text-indigo-400"><TrendingUp className="mr-3 p-2 bg-secondary rounded-xl" size={32} />Performance Over Time</h4>
-        <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
-          <LineChart data={chartData}>
-            <CartesianGrid vertical={false} />
-            <XAxis dataKey="date" tickLine={false} axisLine={false} tickMargin={8} />
-            <YAxis yAxisId="left" orientation="left" />
-            <YAxis yAxisId="right" orientation="right" />
-            <Tooltip content={<ChartTooltipContent />} />
-            <Line yAxisId="left" dataKey="wpm" type="monotone" stroke="var(--color-wpm)" strokeWidth={2} dot={false} />
-            <Line yAxisId="right" dataKey="accuracy" type="monotone" stroke="var(--color-accuracy)" strokeWidth={2} dot={false} />
+        <ChartContainer config={chartConfig} className="min-h-[300px] w-full">
+          <LineChart data={chartData} margin={{ top: 5, right: 20, left: 20, bottom: 5 }}>
+            <CartesianGrid strokeDasharray="3 3" vertical={false} />
+            <XAxis
+              dataKey="date"
+              tickLine={false}
+              axisLine={false}
+              tickMargin={10}
+              fontSize={12}
+            />
+            <YAxis
+              yAxisId="left"
+              orientation="left"
+              stroke="var(--color-wpm)"
+              tickLine={false}
+              axisLine={false}
+              fontSize={12}
+              label={{ value: 'WPM', angle: -90, position: 'insideLeft', fill: 'var(--color-wpm)' }}
+            />
+            <YAxis
+              yAxisId="right"
+              orientation="right"
+              stroke="var(--color-accuracy)"
+              tickLine={false}
+              axisLine={false}
+              fontSize={12}
+              label={{ value: 'Accuracy (%)', angle: 90, position: 'insideRight', fill: 'var(--color-accuracy)' }}
+            />
+            <Tooltip
+              content={<ChartTooltipContent indicator="line" />}
+              cursor={{ stroke: 'hsl(var(--muted-foreground))', strokeWidth: 1, strokeDasharray: '3 3' }}
+            />
+            <Legend verticalAlign="top" height={36} />
+            <Line yAxisId="left" dataKey="wpm" type="monotone" stroke="var(--color-wpm)" strokeWidth={2} dot={{ r: 4, fill: 'hsl(var(--background))', stroke: 'var(--color-wpm)' }} activeDot={{ r: 6 }} />
+            <Line yAxisId="right" dataKey="accuracy" type="monotone" stroke="var(--color-accuracy)" strokeWidth={2} dot={{ r: 4, fill: 'hsl(var(--background))', stroke: 'var(--color-accuracy)' }} activeDot={{ r: 6 }} />
           </LineChart>
         </ChartContainer>
       </div>
