@@ -1,5 +1,7 @@
 # LynTest - Hızlı Yazma Testi Uygulaması
 
+**[Web Sitesini Ziyaret Edin!](https://lyntest.lynchest.com)**
+
 LynTest, kullanıcıların yazma hızlarını ve doğruluklarını test etmelerini sağlayan modern bir hızlı yazma uygulamasıdır. Temiz ve sezgisel bir arayüzle, kullanıcılar farklı metin kaynakları ve diller üzerinde pratik yapabilir, performanslarını takip edebilir ve yazma becerilerini geliştirebilirler.
 
 ![LynTest Ana Ekranı](assets/homescreen.png)
