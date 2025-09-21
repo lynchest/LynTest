@@ -2,6 +2,8 @@
 
 LynTest, kullanıcıların yazma hızlarını ve doğruluklarını test etmelerini sağlayan modern bir hızlı yazma uygulamasıdır. Temiz ve sezgisel bir arayüzle, kullanıcılar farklı metin kaynakları ve diller üzerinde pratik yapabilir, performanslarını takip edebilir ve yazma becerilerini geliştirebilirler.
 
+![LynTest Ana Ekranı](assets/homescreen.png)
+
 ## Özellikler
 
 - **Hız ve Doğruluk Testleri:** Kullanıcıların WPM (dakika başına kelime) ve doğruluk oranlarını ölçer.
@@ -50,11 +52,11 @@ Projeyi yerel makinenizde çalıştırmak için aşağıdaki adımları izleyin:
     ```sh
     npm run dev
     ```
-    Uygulama genellikle `http://localhost:5173` adresinde çalışacaktır.
+    Uygulama genellikle `http://localhost:3030` adresinde çalışacaktır.
 
 ## Katkıda Bulunma
 
-LynTest projesine katkıda bulunmak ister misiniz? Katkılarınızı memnuniyetle karşılarız! Lütfen `CONTRIBUTING.md` dosyasını (henüz yoksa yakında eklenecektir) inceleyerek nasıl katkıda bulunabileceğinizi öğrenin.
+LynTest projesine katkıda bulunmak ister misiniz? Katkılarınızı memnuniyetle karşılarız! Lütfen `CONTRIBUTING.md` dosyasını inceleyerek nasıl katkıda bulunabileceğinizi öğrenin.
 
 ## Lisans
 
