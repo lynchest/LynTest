@@ -1,59 +1,61 @@
-# Welcome to your project
+# LynTest - Hızlı Yazma Testi Uygulaması
 
-## Project info
+LynTest, kullanıcıların yazma hızlarını ve doğruluklarını test etmelerini sağlayan modern bir hızlı yazma uygulamasıdır. Temiz ve sezgisel bir arayüzle, kullanıcılar farklı metin kaynakları ve diller üzerinde pratik yapabilir, performanslarını takip edebilir ve yazma becerilerini geliştirebilirler.
 
-## How can I edit this code?
+## Özellikler
 
-There are several ways of editing your application.
+- **Hız ve Doğruluk Testleri:** Kullanıcıların WPM (dakika başına kelime) ve doğruluk oranlarını ölçer.
+- **Çoklu Dil Desteği:** Farklı dillerde metin kaynakları sunar.
+- **Geçmiş Takibi:** Önceki test sonuçlarını kaydeder ve ilerlemeyi gösterir.
+- **Duyarlı Tasarım:** Masaüstü ve mobil cihazlarda sorunsuz bir deneyim sunar.
+- **Özelleştirilebilir Ayarlar:** Kullanıcıların test tercihlerini ayarlamasına olanak tanır.
 
-**Use your preferred IDE**
+## Teknolojiler
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in the deployed version.
+Bu proje aşağıdaki teknolojilerle geliştirilmiştir:
 
-**Use your preferred IDE**
+- **Vite:** Hızlı geliştirme deneyimi için yeni nesil frontend aracı.
+- **TypeScript:** Daha güvenli ve ölçeklenebilir kod için JavaScript'in tip güvenli bir üst kümesi.
+- **React:** Kullanıcı arayüzleri oluşturmak için deklaratif, bileşen tabanlı bir JavaScript kütüphanesi.
+- **shadcn-ui:** Erişilebilir ve özelleştirilebilir UI bileşenleri kütüphanesi.
+- **Tailwind CSS:** Hızlı ve esnek UI geliştirme için bir yardımcı program öncelikli CSS çerçevesi.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in the deployed version.
+## Yerel Kurulum
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+Projeyi yerel makinenizde çalıştırmak için aşağıdaki adımları izleyin:
 
-Follow these steps:
+### Önkoşullar
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+- Node.js (tercihen [nvm](https://github.com/nvm-sh/nvm#installing-and-updating) ile)
+- npm (Node.js ile birlikte gelir)
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+### Adımlar
 
-# Step 3: Install the necessary dependencies.
-npm i
+1.  **Depoyu Klonlayın:**
+    ```sh
+    git clone https://github.com/lynchest/LynTest.git
+    ```
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+2.  **Proje Dizinine Gidin:**
+    ```sh
+    cd LynTest
+    ```
 
-**Edit a file directly in GitHub**
+3.  **Bağımlılıkları Yükleyin:**
+    ```sh
+    npm install
+    ```
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+4.  **Geliştirme Sunucusunu Başlatın:**
+    ```sh
+    npm run dev
+    ```
+    Uygulama genellikle `http://localhost:5173` adresinde çalışacaktır.
 
-**Use GitHub Codespaces**
+## Katkıda Bulunma
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+LynTest projesine katkıda bulunmak ister misiniz? Katkılarınızı memnuniyetle karşılarız! Lütfen `CONTRIBUTING.md` dosyasını (henüz yoksa yakında eklenecektir) inceleyerek nasıl katkıda bulunabileceğinizi öğrenin.
 
-## What technologies are used for this project?
+## Lisans
 
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
+Bu proje GNU General Public License v3.0 altında lisanslanmıştır. Daha fazla bilgi için `LICENSE` dosyasına bakın.
