@@ -16,7 +16,7 @@
     "ülke", "şehir", "köy", "deniz", "orman", "dağ", "göl", "nehir", "kalp", "akıl", "ruh", "beden",
     "arkadaş", "dost", "aile", "sevgi", "saygı", "güven", "umut", "hayal", "gerçek", "oyun", "film",
     "müzik", "şarkı", "dans", "spor", "sağlık", "hastalık", "doktor", "ilaç", "geçmiş", "gelecek", 
-    "anı", "zaman", "an", "şimdi", "son", "ilk", "orta", "bitiş", "başlangıç", "sonuç", "neden"
+    "anı", "zaman", "an", "şimdi", "son", "ilk", "orta", "bitiş", "başlangıç", "sonuç", "neden", "ses"
   ],
   "keyboardLayout": [
     ["é", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "="],
